@@ -1,0 +1,45 @@
+.Card {
+    width: 300px;
+    margin: 10px auto;
+}
+
+.title {
+    font-size: 20;
+    text-align: left;
+}
+
+@media (min-width: 500px) {
+    .Card{
+        width: 60%;
+    }
+}
+
+.CardActions {
+    border-top: 1px solid rgba(0,0,0,.1);
+    display: flex;
+	box-sizing:border-box;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.TopSpread {
+    display: flex;
+	box-sizing:border-box;
+	align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.AdminTools {
+    justify-content: left;
+}
+
+.fileData {
+    margin: 20px 0 ;
+    box-sizing: border-box;
+}
+
+.fileData label {
+    margin-right: 10px;
+    margin-bottom: 5px; 
+}

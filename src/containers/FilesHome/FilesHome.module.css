@@ -1,0 +1,14 @@
+.FilesHome {
+    margin: 20px auto;
+    justify-content: center;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+
+}
+
+.AbsoluteAdd {
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+}

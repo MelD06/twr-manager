@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import NavBar from "./components/NavBar/NavBar";
+import FilesHome from "./containers/FilesHome/FilesHome";
+import FileDetail from './components/FileDetail/FileDetail';
+import Drawer from "./components/Drawer/Drawer";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { BrowserRouter, Route } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <BrowserRouter>
+      <CssBaseline />
+      <Drawer />
+      <NavBar />
+        <main className="Content">
+          <Route path="/files/" component={FilesHome} />
+        </main>
+      </BrowserRouter>
     </div>
   );
 }

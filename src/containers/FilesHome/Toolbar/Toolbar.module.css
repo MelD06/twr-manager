@@ -1,0 +1,22 @@
+.Toolbar {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: space-between;
+  margin: 0 15px;
+  width: 300px;
+}
+
+.iconSmall {
+    margin-left: 1px;
+    font-size: 20;
+}
+
+.button {
+    justify-content: end;
+}
+
+@media (min-width: 500px) {
+    .Toolbar{
+        width: 60%;
+    }
+}
