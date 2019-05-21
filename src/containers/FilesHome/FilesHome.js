@@ -24,8 +24,8 @@ class FilesHome extends Component {
         text:
           "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         weather: "stormy",
-        complexity: "medium",
-        traffic: "low"
+        complexity: "very-high",
+        traffic: "very-low"
       },
       {
         id: "3",
@@ -33,8 +33,8 @@ class FilesHome extends Component {
         text:
           "ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         weather: "sunny",
-        complexity: "medium",
-        traffic: "medium"
+        complexity: "low",
+        traffic: "very-high"
       },
       {
         id: "4",
@@ -64,7 +64,6 @@ class FilesHome extends Component {
       <div className={classes.FilesHome}>
         <Toolbar />
         {summaries}
-        <Route path="/:id" component={FileDetail} />
       </div>
     );
   }

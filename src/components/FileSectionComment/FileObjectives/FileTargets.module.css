@@ -1,8 +1,10 @@
-.FileObjectives {
+.FileTargets {
     display:block;
     border-bottom:1px solid #ccc;
     background-color: #eee;
     font-size: 9pt;
     padding-left: 0px;
     width: 100px;
+    padding-bottom: 20px;
+    object-fit: fill;
 }

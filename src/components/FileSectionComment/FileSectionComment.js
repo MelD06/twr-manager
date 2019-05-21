@@ -23,7 +23,7 @@ const fileSectionComment = props => {
           </Typography>
         </Grid>
         <Grid key="Objectives" item xs={3} >
-        <FileObjectives target='insufficient' />
+        <FileObjectives target={props.target} />
         </Grid>
       </Grid>
 

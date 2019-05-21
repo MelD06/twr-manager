@@ -5,12 +5,11 @@ import { Grid } from "@material-ui/core";
 const fileTargets = props => {
 
   return (
-    <div className={classes.FileObjectives}>
+    <div className={classes.FileTargets}>
       <Grid
         container
         spacing={0}
         justify="center"
-        className={classes.FileObjectives}
       >
         <Grid key="Atteint" item xs={12}>
           {props.target === 'ok' ? <span style={{backgroundColor:'#3ba01c', color:'white'}}>ATTEINT</span> : <span>ATTEINT</span> }

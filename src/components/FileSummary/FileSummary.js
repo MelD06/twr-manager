@@ -10,17 +10,15 @@ import Tooltip from "@material-ui/core/Tooltip";
 import SunnyIcon from "@material-ui/icons/WbSunny";
 import CloudyIcon from "@material-ui/icons/WbCloudy";
 import StormyIcon from "@material-ui/icons/FlashOn";
-import VeryLowIcon from "@material-ui/icons/SignalCellular0Bar";
-import LowIcon from "@material-ui/icons/SignalCellular1Bar";
-import MediumIcon from "@material-ui/icons/SignalCellular2Bar";
-import HighIcon from "@material-ui/icons/SignalCellular3Bar";
-import VeryHighIcon from "@material-ui/icons/SignalCellular4Bar";
 import NoDataIcon from "@material-ui/icons/NotInterested";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Create";
 
+import LevelIcon from '../../components/UI/LevelIcon/LevelIcon';
+
 import classes from "./FileSummary.module.css";
 import { CardActionArea } from "@material-ui/core";
+import { Link } from 'react-router-dom';
 
 /*****************
  * This Component uses material-ui to
@@ -40,26 +38,12 @@ const fileSummary = props => {
         return <NoDataIcon />;
     }
   };
-  const getLevelIcon = level => {
-    switch (level) {
-      case "very-low":
-        return <VeryLowIcon />;
-      case "low":
-        return <LowIcon />;
-      case "medium":
-        return <MediumIcon />;
-      case "high":
-        return <HighIcon />;
-        case "very-high":
-          return <VeryHighIcon />;
-      default:
-        return <NoDataIcon />;
-    }
-  };
+
 
   return (
     <Card className={classes.Card}>
       <CardActionArea>
+        <Link to={'/files/' + props.id } className={classes.FileSummaryLink} >
         <CardContent>
         <div className={classes.TopSpread}>
         <Typography
@@ -78,6 +62,7 @@ const fileSummary = props => {
             {props.text.substring(0, 200) + "..."}
           </Typography>
         </CardContent>
+        </Link>
       </CardActionArea>
       <CardActions className={classes.CardActions}>
       <div className={classes.AdminTools}> 
@@ -92,18 +77,9 @@ const fileSummary = props => {
           </IconButton>
         </Tooltip>
         </div>
-        <div className={classes.fileData}>
-          <label>Complexité</label>
-        <Tooltip title={props.complexity} placement="right">
-          {getLevelIcon(props.complexity)}
-        </Tooltip>
-      </div>
-        <div className={classes.fileData}>
-          <label>Trafic</label>
-        <Tooltip title={props.traffic} placement="right">
-          {getLevelIcon(props.traffic)}
-        </Tooltip>
-      </div>
+
+        <LevelIcon label="Complexité" level={props.complexity} />
+        <LevelIcon label="Traffic" level={props.traffic} />
       </CardActions>
     </Card>
   );

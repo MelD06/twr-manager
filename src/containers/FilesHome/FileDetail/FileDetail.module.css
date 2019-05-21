@@ -1,3 +1,4 @@
 .FileDetail {
-    padding-top: 20px;
+    padding: 20px;
+    flex-direction: row-reverse;
 }
