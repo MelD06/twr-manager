@@ -7,18 +7,15 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 
 /* ICONS */
-import SunnyIcon from "@material-ui/icons/WbSunny";
-import CloudyIcon from "@material-ui/icons/WbCloudy";
-import StormyIcon from "@material-ui/icons/FlashOn";
-import NoDataIcon from "@material-ui/icons/NotInterested";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Create";
 
-import LevelIcon from '../UI/Icons/LevelIcon/LevelIcon';
+import LevelIcon from '../FileSectionComment/LevelIcon/LevelIcon';
 
 import classes from "./FileSummary.module.css";
 import { CardActionArea } from "@material-ui/core";
 import { Link } from 'react-router-dom';
+import WeatherIcon from '../../components/UI/Icons/WeatherIcon/WeatherIcon';
 
 /*****************
  * This Component uses material-ui to
@@ -26,18 +23,6 @@ import { Link } from 'react-router-dom';
  * is clickable and leads to a file detail
  */
 const fileSummary = props => {
-  const getWeatherIcon = weather => {
-    switch (weather) {
-      case "sunny":
-        return <SunnyIcon />;
-      case "cloudy":
-        return <CloudyIcon />;
-      case "stormy":
-        return <StormyIcon />;
-      default:
-        return <NoDataIcon />;
-    }
-  };
 
 
   return (
@@ -53,9 +38,7 @@ const fileSummary = props => {
           >
             {props.date}
           </Typography>
-          <Tooltip title={props.weather}>
-          {getWeatherIcon(props.weather)}
-        </Tooltip>
+          <WeatherIcon weather={props.weather} />
         </div>
           
           <Typography>

@@ -5,6 +5,7 @@ import Markdown from "react-markdown";
 import { Tooltip } from "@material-ui/core";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import ReactMde from "react-mde";
+import Smiley from '../UI/Icons/SmileyIcon/SmileyIcon';
 
 import EditIcon from "@material-ui/icons/Create";
 import {IconButton, Button} from "@material-ui/core";
@@ -50,7 +51,7 @@ const fileSectionComment = props => {
           </Typography>
         </Grid>
         <Grid key="Targets" item xs={1}>
-          <FileTargets target={props.target} />
+          <Smiley smiley={props.target} />
         </Grid>
       </Grid>
       {output}

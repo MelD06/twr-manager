@@ -2,6 +2,7 @@ import React from "react";
 import { Typography, Paper, Grid } from "@material-ui/core";
 import LevelIcon from '../FileSectionComment/LevelIcon/LevelIcon';
 import classes from "./InfoFile.module.css";
+import WeatherIcon from '../UI/Icons/WeatherIcon/WeatherIcon';
 
 const infoFile = props => {
   return (
@@ -27,7 +28,7 @@ const infoFile = props => {
         {/* SECOND LINE */}
         <Grid key="parameters" item xs={6}>
         <Typography component="p">
-        Meteo: {props.data.weather}<br />
+        Meteo: <WeatherIcon weather={props.data.weather} /><br />
         <br />
         QFU: 17 ET/OU 35<br />
         Positions : SOL, LOC, COOR<br />
