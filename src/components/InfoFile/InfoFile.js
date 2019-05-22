@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Paper, Grid } from "@material-ui/core";
-import LevelIcon from '../UI/Icons/LevelIcon/LevelIcon';
+import LevelIcon from '../FileSectionComment/LevelIcon/LevelIcon';
 import classes from "./InfoFile.module.css";
 
 const infoFile = props => {

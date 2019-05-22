@@ -11,7 +11,7 @@ const NavBar = () => {
       <AppBar position="fixed" >
         <Toolbar>
           <Typography variant="title" color="inherit">
-            React & Material-UI Sample Application
+            TWR-Manager
           </Typography>
         </Toolbar>
       </AppBar>

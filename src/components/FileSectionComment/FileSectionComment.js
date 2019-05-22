@@ -2,7 +2,7 @@ import React from "react";
 import { Paper, Typography, Grid } from "@material-ui/core";
 import FileTargets from "./FileTargets/FileTargets";
 import Markdown from "react-markdown";
-import { Tooltip, Fab } from "@material-ui/core";
+import { Tooltip } from "@material-ui/core";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import ReactMde from "react-mde";
 

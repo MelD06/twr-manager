@@ -100,6 +100,7 @@ const fileSections = [
 
 class fileDetail extends Component {
   state = {
+    sectionToAdd: "",
     sections: [],
     fileData: {
       sections: [
@@ -110,7 +111,7 @@ class fileDetail extends Component {
           edit: false
         },
         {
-          id: "1",
+          id: "11",
           title: "Gestion des arrivées",
           subtitle: "Suivi & anticipation - Relations APP - OPS",
           comment: "bla bla bla bla",
@@ -118,7 +119,7 @@ class fileDetail extends Component {
           edit: false
         },
         {
-          id: "2",
+          id: "9",
           title: "Gestion des Régulations",
           subtitle: "CTOT - Vols Suspendus - Dialogue Nice",
           comment: "bla bla bla sdsds",
@@ -171,6 +172,35 @@ class fileDetail extends Component {
     });
   }
 
+  onSectionToAddChangeHandler(event) {
+    this.setState({
+      sectionToAdd: event.target.value
+    });
+  }
+
+  onAddSectionDoHandler() {
+    const newData = { ...this.state.fileData };
+    let sectionData = [];
+    fileSections.forEach(section => {
+      if (section.sectionId === this.state.sectionToAdd) {
+        sectionData = section;
+      }
+    });
+
+    const newSection = {
+      id: this.state.sectionToAdd,
+      title: sectionData.title,
+      subtitle: sectionData.subtitle,
+      comment: "",
+      target: "ok",
+      edit: true
+    };
+    newData.sections.push(newSection);
+
+    this.setState({
+      fileData: newData
+    });
+  }
   render() {
     const sections = this.state.fileData.sections.map(element => {
       return (
@@ -194,7 +224,6 @@ class fileDetail extends Component {
       });
     });
 
-    console.log(usedIds);
     return (
       <Grid
         container
@@ -210,7 +239,14 @@ class fileDetail extends Component {
             Technique / Comportement 2 onglets
           </Typography>
           {sections}
-          <FileSectionAdd allSections={fileSections} usedSections={usedIds} />
+          <FileSectionAdd
+            allSections={fileSections}
+            usedSections={usedIds}
+            sectionToAdd={this.state.sectionToAdd}
+            onAdd={() => this.onAddSectionDoHandler()}
+            sectionToAddChange={(event) =>
+              this.onSectionToAddChangeHandler(event)}
+          />
         </Grid>
       </Grid>
     );

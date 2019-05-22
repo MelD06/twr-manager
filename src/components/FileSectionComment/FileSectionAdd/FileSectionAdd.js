@@ -13,7 +13,7 @@ const fileSectionAdd = props => {
   const options = props.allSections.map(section => {
     if (!props.usedSections.includes(section.sectionId)) {
       return (
-        <MenuItem value={section.id}>
+        <MenuItem key={section.sectionId} value={section.sectionId}>
           {section.title}
         </MenuItem>
       );
@@ -25,11 +25,10 @@ const fileSectionAdd = props => {
     <div className={classes.FileSectionAdd}>
       <FormControl>
         <Select
-          value={null}
-          onChange={null}
+          value={props.sectionToAdd}
+          onChange={props.sectionToAddChange}
           name="section"
           displayEmpty
-          className={classes.selectEmpty}
         >
           {options}
         </Select>
@@ -39,9 +38,9 @@ const fileSectionAdd = props => {
         variant="contained"
         size="small"
         className={classes.button}
-        onClick={props.sectionToggleEdit}
+        onClick={props.onAdd}
       >
-        <AddIcon className={classes.addIcon} />
+        <AddIcon className={classes.addIcon}  />
         Ajouter
       </Button>
     </div>
