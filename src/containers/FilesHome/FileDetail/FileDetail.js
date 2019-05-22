@@ -3,6 +3,7 @@ import { Grid, Typography } from "@material-ui/core";
 import classes from "./FileDetail.module.css";
 import InfoFile from "../../../components/InfoFile/InfoFile";
 import FileSectionComment from "../../../components/FileSectionComment/FileSectionComment";
+import FileSectionAdd from "../../../components/FileSectionComment/FileSectionAdd/FileSectionAdd";
 
 const fileSections = [
   {
@@ -143,9 +144,9 @@ class fileDetail extends Component {
   };
 
   onSectionEditHandler(id) {
-    const newData = {...this.state.fileData};
-    const newSections = newData.sections.map((section) => {
-      if(section.id === id){
+    const newData = { ...this.state.fileData };
+    const newSections = newData.sections.map(section => {
+      if (section.id === id) {
         section.edit = !section.edit;
       }
       return section;
@@ -157,9 +158,9 @@ class fileDetail extends Component {
   }
 
   onSectionChangeHandler(event, id) {
-    const newData = {...this.state.fileData};
-    const newSections = newData.sections.map((section) => {
-      if(section.id === id){
+    const newData = { ...this.state.fileData };
+    const newSections = newData.sections.map(section => {
+      if (section.id === id) {
         section.comment = event;
       }
       return section;
@@ -181,10 +182,19 @@ class fileDetail extends Component {
           comment={element.comment}
           edit={element.edit}
           sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
-          sectionChange={(event) => this.onSectionChangeHandler(event, element.id)}
+          sectionChange={event =>
+            this.onSectionChangeHandler(event, element.id)}
         />
       );
     });
+
+    const usedIds = this.state.fileData.sections.map(element => {
+      return [...Array(this.state.fileData.sections.length)].reduce(() => {
+        return element.id;
+      });
+    });
+
+    console.log(usedIds);
     return (
       <Grid
         container
@@ -200,6 +210,7 @@ class fileDetail extends Component {
             Technique / Comportement 2 onglets
           </Typography>
           {sections}
+          <FileSectionAdd allSections={fileSections} usedSections={usedIds} />
         </Grid>
       </Grid>
     );
