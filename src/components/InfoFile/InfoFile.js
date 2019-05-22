@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Paper, Grid } from "@material-ui/core";
-import LevelIcon from '../UI/LevelIcon/LevelIcon';
+import LevelIcon from '../UI/Icons/LevelIcon/LevelIcon';
 import classes from "./InfoFile.module.css";
 
 const infoFile = props => {
@@ -10,34 +10,32 @@ const infoFile = props => {
         <Grid key="date" item xs={6}>
           <Typography component="h2"
             color="textSecondary">
-            23-03-2019
-          </Typography>          <Typography component="h5">
-            De 9H a 18H<br />
-            <i>Configuration : i2</i>
+            {props.data.date}
+          </Typography>         
+          <Typography component="h5">
+            {props.data.time}
           </Typography>
         </Grid>
         <Grid key="intruction" item xs={6}>
           <Typography variant="body1">
             <i>
-              Elève: DIEZ Melvin<br />
-              Instructeur: BGS
+              Elève: {props.data.student}<br />
+              Instructeur: {props.data.instructor}
             </i>
           </Typography>
         </Grid>
         {/* SECOND LINE */}
-        <Grid key="intruction" item xs={6}>
+        <Grid key="parameters" item xs={6}>
         <Typography component="p">
-        Meteo: Nuageux<br />
-        <LevelIcon level={props.complexity} label="Complexité" /><br />
+        Meteo: {props.data.weather}<br />
+        <br />
         QFU: 17 ET/OU 35<br />
-      </Typography>
-        </Grid>
-        <Grid key="intruction" item xs={6}>
-        <Typography component="p">
-        METAR: ###<br />
-        <LevelIcon level={props.traffic} label="Trafic" /><br />
         Positions : SOL, LOC, COOR<br />
       </Typography>
+        </Grid>
+        <Grid key="comptraf" item xs={6}>
+        <LevelIcon level={props.data.complexity} label="Complexité" />
+        <LevelIcon level={props.data.traffic} label="Trafic" />
         </Grid>
       </Grid>
 

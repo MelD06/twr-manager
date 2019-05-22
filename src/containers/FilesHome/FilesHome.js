@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import classes from "./FilesHome.module.css";
-import { Route } from 'react-router-dom';
-import FileDetail from './FileDetail/FileDetail';
  
 import FileSummary from "../../components/FileSummary/FileSummary";
 import Toolbar from "./Toolbar/Toolbar";

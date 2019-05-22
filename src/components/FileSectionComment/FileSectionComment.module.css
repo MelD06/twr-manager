@@ -1,6 +1,5 @@
 .Headline {
     display:block;
-    border-bottom:1px solid #ccc;
     padding-bottom: 5px;
     padding-right: 0px;
 }
@@ -17,4 +16,24 @@
 
 .FileSectionComment {
     margin-top: 5px; 
+    padding: 5px 8px;
+}
+
+.FileSectionContainer{
+    padding: 0 5px;
+    border-bottom:1px solid #ccc;
+}
+
+.ReactMde {
+    margin: 20px 0;
+}
+
+.saveIcon {
+    margin-left: 2px;
+    font-size: 20;
+}
+
+.CommentTypo {
+    text-align: justify;
+
 }

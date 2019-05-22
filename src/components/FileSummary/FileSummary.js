@@ -14,7 +14,7 @@ import NoDataIcon from "@material-ui/icons/NotInterested";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Create";
 
-import LevelIcon from '../../components/UI/LevelIcon/LevelIcon';
+import LevelIcon from '../UI/Icons/LevelIcon/LevelIcon';
 
 import classes from "./FileSummary.module.css";
 import { CardActionArea } from "@material-ui/core";
