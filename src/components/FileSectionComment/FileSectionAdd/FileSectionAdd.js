@@ -10,16 +10,17 @@ import {
 } from "@material-ui/core";
 
 const fileSectionAdd = props => {
-  const options = props.allSections.map(section => {
-    if (!props.usedSections.includes(section.sectionId)) {
+  const options = props.allSections.filter(section => {
+    if (props.usedSections.includes(section.sectionId)) {
+      return false }
+      return true}).map(section => {
       return (
         <MenuItem key={section.sectionId} value={section.sectionId}>
           {section.title}
         </MenuItem>
       );
     }
-    return null;
-  });
+  );
 
   let fileSectionUI = (
     <div className={classes.FileSectionAdd}>
@@ -45,10 +46,12 @@ const fileSectionAdd = props => {
       </Button>
     </div>
   );
-  if (options === null) {
-    fileSectionUI = null;
+  if (options.length === 0) {
+    fileSectionUI = (<div className={classes.FileSectionAdd}>
+    <p>Aucun élément à ajouter.</p>
+    </div>);
   }
-
+  console.log(options)
   return fileSectionUI;
 };
 

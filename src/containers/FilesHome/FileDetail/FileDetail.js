@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Slide } from "@material-ui/core";
 import classes from "./FileDetail.module.css";
 import InfoFile from "../../../components/InfoFile/InfoFile";
 import FileSectionComment from "../../../components/FileSectionComment/FileSectionComment";
@@ -129,8 +129,10 @@ class fileDetail extends Component {
       ],
       generalComment: "dfkljadsfl",
       info: {
-        date: "2019-01-01",
-        time: "08H a 20H",
+        date: new Date(Date.UTC(2012, 11, 20, 3, 0, 0)),
+        time: {
+            start: new Date('2018-11-06 08:00:00'),
+        end: new Date('2018-11-06 20:00:00')},
         student: "Melvin Diez",
         instructor: "ABC",
         complexity: "low",
@@ -139,10 +141,17 @@ class fileDetail extends Component {
         windDirection: "east",
         windSpeed: "low",
         runways: ["17", "35", "04"],
-        positions: ["GND", "COOR", "LOC"]
+        positions: ["GND", "COOR", "LOC"],
+        edit: false
       }
     }
   };
+
+  // SECTION HANDLERS
+  //
+  //
+  //
+  // /////////////////////////
 
   onSectionEditHandler(id) {
     const newData = { ...this.state.fileData };
@@ -179,33 +188,31 @@ class fileDetail extends Component {
   }
 
   onAddSectionDoHandler() {
-    if(this.state.sectionToAdd === ''){
+    if (this.state.sectionToAdd === "") {
       return false; //TODO: Error management
-     } else {
+    } else {
+      const newData = { ...this.state.fileData };
+      let sectionData = [];
+      fileSections.forEach(section => {
+        if (section.sectionId === this.state.sectionToAdd) {
+          sectionData = section;
+        }
+      });
 
-    
-    const newData = { ...this.state.fileData };
-    let sectionData = [];
-    fileSections.forEach(section => {
-      if (section.sectionId === this.state.sectionToAdd) {
-        sectionData = section;
-      }
-    });
+      const newSection = {
+        id: this.state.sectionToAdd,
+        title: sectionData.title,
+        subtitle: sectionData.subtitle,
+        comment: "",
+        target: "ok",
+        edit: true
+      };
+      newData.sections.push(newSection);
 
-    const newSection = {
-      id: this.state.sectionToAdd,
-      title: sectionData.title,
-      subtitle: sectionData.subtitle,
-      comment: "",
-      target: "ok",
-      edit: true
-    };
-    newData.sections.push(newSection);
-
-    this.setState({
-      fileData: newData
-    });
-  }
+      this.setState({
+        fileData: newData
+      });
+    }
   }
 
   onSectionDelete(id) {
@@ -214,7 +221,7 @@ class fileDetail extends Component {
     newData.sections = newSections;
     this.setState({
       fileData: newData
-    })
+    });
   }
 
   onSectionChangeTarget(id, event) {
@@ -229,9 +236,34 @@ class fileDetail extends Component {
     newData.sections = newSections;
     this.setState({
       fileData: newData
-    })
+    });
   }
 
+  // FILE-INFO HANDLERS
+  //
+  //
+  //
+  // /////////////////////////
+
+  onInfoEditHandler() {
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    newInfo.edit = !newInfo.edit;
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+  }
+
+  onInfoDateChangeHandler(event) {
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    newInfo.date = event;
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+  }
 
   render() {
     const sections = this.state.fileData.sections.map(element => {
@@ -248,7 +280,8 @@ class fileDetail extends Component {
           sectionDelete={() => this.onSectionDelete(element.id)}
           sectionChange={event =>
             this.onSectionChangeHandler(event, element.id)}
-          sectionChangeTarget={(event) => this.onSectionChangeTarget(element.id, event)}
+          sectionChangeTarget={event =>
+            this.onSectionChangeTarget(element.id, event)}
         />
       );
     });
@@ -260,30 +293,37 @@ class fileDetail extends Component {
     });
 
     return (
-      <Grid
-        container
-        spacing={16}
-        justify="center"
-        className={classes.FileDetail}
-      >
-        <Grid key="3" item md={4} xs={12}>
-          <InfoFile complexity="medium" data={this.state.fileData.info} />
+      <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+        <Grid
+          container
+          spacing={16}
+          justify="center"
+          className={classes.FileDetail}
+        >
+          <Grid key="3" item md={4} xs={12}>
+            <InfoFile
+              complexity="medium"
+              data={this.state.fileData.info}
+              onEditToggle={() => this.onInfoEditHandler()}
+              onDateChange={(event) => this.onInfoDateChangeHandler(event)}
+            />
+          </Grid>
+          <Grid key="2" item md={8} xs={12}>
+            <Typography element="h3">
+              Technique / Comportement 2 onglets
+            </Typography>
+            {sections}
+            <FileSectionAdd
+              allSections={fileSections}
+              usedSections={usedIds}
+              sectionToAdd={this.state.sectionToAdd}
+              onAdd={() => this.onAddSectionDoHandler()}
+              sectionToAddChange={event =>
+                this.onSectionToAddChangeHandler(event)}
+            />
+          </Grid>
         </Grid>
-        <Grid key="2" item md={8} xs={12}>
-          <Typography element="h3">
-            Technique / Comportement 2 onglets
-          </Typography>
-          {sections}
-          <FileSectionAdd
-            allSections={fileSections}
-            usedSections={usedIds}
-            sectionToAdd={this.state.sectionToAdd}
-            onAdd={() => this.onAddSectionDoHandler()}
-            sectionToAddChange={(event) =>
-              this.onSectionToAddChangeHandler(event)}
-          />
-        </Grid>
-      </Grid>
+      </Slide>
     );
   }
 }

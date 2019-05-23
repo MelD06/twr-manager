@@ -47,6 +47,8 @@ const fileSectionComment = props => {
           value={props.comment}
           onChange={props.sectionChange}
           className={classes.ReactMde}
+          //TODO: ReactMde state is controlled, should be implemented see https://github.com/andrerpena/react-mde/issues/162
+          //generateMarkdownPreview={markdown => <Markdown source={markdown} className={classes.CommentTypo} /> }
         />
         <Button
           variant="contained"
