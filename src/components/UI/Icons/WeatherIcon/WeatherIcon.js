@@ -8,30 +8,16 @@ import NoDataIcon from "@material-ui/icons/NotInterested";
 
 //TODO: Refactor
 const weatherIcon = props => {
-  let tipTitle = "";
-  const getWeatherIcon = weather => {
-    switch (weather) {
+    switch (props.weather) {
       case "sunny":
-        tipTitle = "CAVOK";
         return <SunnyIcon />;
       case "cloudy":
-        tipTitle = "Nuageux";
         return <CloudyIcon />;
       case "stormy":
-        tipTitle = "Perturbé";
         return <StormyIcon />;
       default:
-        tipTitle = "Aucune Donnée";
         return <NoDataIcon />;
     }
-  };
-  const Icon = getWeatherIcon(props.weather);
-
-  return (
-    <Tooltip title={tipTitle}>
-      {Icon}
-    </Tooltip>
-  );
 };
 
 export default weatherIcon;

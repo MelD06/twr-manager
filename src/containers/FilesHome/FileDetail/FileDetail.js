@@ -127,7 +127,6 @@ class fileDetail extends Component {
           edit: false
         }
       ],
-      generalComment: "dfkljadsfl",
       info: {
         date: new Date(Date.UTC(2012, 11, 20, 3, 0, 0)),
         time: {
@@ -265,6 +264,30 @@ class fileDetail extends Component {
     });
   }
 
+  onInfoLevelChangeHandler(event) {
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    if(event.target.name === 'complexity'){
+      newInfo.complexity = event.target.value;
+    } else if (event.target.name === 'traffic') {
+      newInfo.traffic = event.target.value;
+    }
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+  }
+
+  onInfoChangeHandler(event){
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+      newInfo[event.target.name] = event.target.value;
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+  }
+
   render() {
     const sections = this.state.fileData.sections.map(element => {
       return (
@@ -302,10 +325,11 @@ class fileDetail extends Component {
         >
           <Grid key="3" item md={4} xs={12}>
             <InfoFile
-              complexity="medium"
               data={this.state.fileData.info}
               onEditToggle={() => this.onInfoEditHandler()}
-              onDateChange={(event) => this.onInfoDateChangeHandler(event)}
+              onDateChange={(event) => this.onInfoChangeHandler(event)}
+              onLevelChange={(event) => this.onInfoChangeHandler(event)}
+              onWeatherChange={(event) => this.onInfoChangeHandler(event)}
             />
           </Grid>
           <Grid key="2" item md={8} xs={12}>

@@ -1,0 +1,9 @@
+.LevelIcon {
+    margin: 20px 0 ;
+    box-sizing: border-box;
+}
+
+.LevelIcon label {
+    margin-right: 10px;
+    margin-bottom: 5px; 
+}

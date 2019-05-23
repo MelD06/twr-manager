@@ -51,7 +51,6 @@ const fileSectionAdd = props => {
     <p>Aucun élément à ajouter.</p>
     </div>);
   }
-  console.log(options)
   return fileSectionUI;
 };
 
