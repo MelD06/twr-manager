@@ -1,0 +1,16 @@
+/* 
+Future plans to stick the module on the upper right corner of the screen
+
+.InfoFile {
+    position: fixed;
+    right: 2%;
+    width: 20%;
+}
+
+@media(max-width:600px){
+    .InfoFile {
+        position: auto;
+        right: auto;
+        width: auto;
+    }
+} */

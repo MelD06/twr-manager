@@ -179,6 +179,11 @@ class fileDetail extends Component {
   }
 
   onAddSectionDoHandler() {
+    if(this.state.sectionToAdd === ''){
+      return false; //TODO: Error management
+     } else {
+
+    
     const newData = { ...this.state.fileData };
     let sectionData = [];
     fileSections.forEach(section => {
@@ -201,19 +206,49 @@ class fileDetail extends Component {
       fileData: newData
     });
   }
+  }
+
+  onSectionDelete(id) {
+    const newData = { ...this.state.fileData };
+    const newSections = newData.sections.filter(section => section.id !== id);
+    newData.sections = newSections;
+    this.setState({
+      fileData: newData
+    })
+  }
+
+  onSectionChangeTarget(id, event) {
+    const newData = { ...this.state.fileData };
+    const newSections = newData.sections.map(section => {
+      if (section.id === id) {
+        section.target = event.target.value;
+      }
+      return section;
+    });
+
+    newData.sections = newSections;
+    this.setState({
+      fileData: newData
+    })
+  }
+
+
   render() {
     const sections = this.state.fileData.sections.map(element => {
       return (
         <FileSectionComment
           key={element.id}
+          id={element.id}
           criterion={element.title}
           subtitle={element.subtitle}
           target={element.target}
           comment={element.comment}
           edit={element.edit}
           sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
+          sectionDelete={() => this.onSectionDelete(element.id)}
           sectionChange={event =>
             this.onSectionChangeHandler(event, element.id)}
+          sectionChangeTarget={(event) => this.onSectionChangeTarget(element.id, event)}
         />
       );
     });

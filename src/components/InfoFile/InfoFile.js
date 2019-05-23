@@ -6,7 +6,7 @@ import WeatherIcon from '../UI/Icons/WeatherIcon/WeatherIcon';
 
 const infoFile = props => {
   return (
-    <Paper className={classes.infoPaper}>
+    <Paper className={classes.InfoFile}>
       <Grid container spacing={8} justify="space-between">
         <Grid key="date" item xs={6}>
           <Typography component="h2"
