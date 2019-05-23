@@ -6,13 +6,13 @@ import AddIcon from "@material-ui/icons/AddCircle";
 
 import classes from "./Toolbar.module.css";
 
-const Toolbar = props =>
+const Toolbar = props => (
   <div className={classes.Toolbar}>
     <Typography align="left">Page 1 de 20 sur 235 entrées</Typography>
-    <Button variant="contained" size="small" className={classes.button}>
+    <Button variant="contained" size="small" className={classes.button} onClick={props.newFile}>
         <AddIcon className={classes.iconSmall} />
         Nouveau
       </Button>
-  </div>;
+</div>);
 
 export default Toolbar;

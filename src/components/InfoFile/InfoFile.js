@@ -12,8 +12,11 @@ import WeatherSelector from '../UI/Menu/WeatherSelector/WeatherSelector';
 
 
 const infoFile = props => {
-  let date = props.data.date.toLocaleDateString("fr-FR", {year: 'numeric', month:'long', day: 'numeric'});
-  let time = 'De ' + ("0" + props.data.time.start.getHours()).slice(-2) + ':' + ("0" + props.data.time.start.getMinutes()).slice(-2) + ' a ' + ("0" + props.data.time.end.getHours()).slice(-2) + ':' + ("0" + props.data.time.end.getMinutes()).slice(-2);
+  let date = new Date(props.data.date).toLocaleDateString("fr-FR", {year: 'numeric', month:'long', day: 'numeric'});
+  const dateStart = new Date(props.data.time.start);
+  const dateEnd = new Date(props.data.time.end);
+
+  let time = 'De ' + ("0" + dateStart.getHours()).slice(-2) + ':' + ("0" + dateStart.getMinutes()).slice(-2) + ' a ' + ("0" + dateEnd.getHours()).slice(-2) + ':' + ("0" + dateEnd.getMinutes()).slice(-2);
   let complexity = <LevelShow level={props.data.complexity} label="Complexité" />;
   let traffic = <LevelShow level={props.data.traffic} label="Trafic" />;
   let weather = (<WeatherShow weather={props.data.weather} />);

@@ -36,7 +36,7 @@ const fileSummary = props => {
             component="h2"
             color="textSecondary"
           >
-            {props.date}
+            {new Date(props.date).toLocaleDateString("fr-FR", {year: 'numeric', month:'long', day: 'numeric'})}
           </Typography>
           <WeatherIcon weather={props.weather} />
         </div>

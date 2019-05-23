@@ -4,6 +4,7 @@ import classes from "./FileDetail.module.css";
 import InfoFile from "../../../components/InfoFile/InfoFile";
 import FileSectionComment from "../../../components/FileSectionComment/FileSectionComment";
 import FileSectionAdd from "../../../components/FileSectionComment/FileSectionAdd/FileSectionAdd";
+import axios from '../../../axios-instance';
 
 const fileSections = [
   {
@@ -103,35 +104,12 @@ class fileDetail extends Component {
     sectionToAdd: "",
     sections: [],
     fileData: {
-      sections: [
-        {
-          id: "0",
-          title: "Commentaire Global",
-          comment: "bla bla bla bla",
-          edit: false
-        },
-        {
-          id: "11",
-          title: "Gestion des arrivées",
-          subtitle: "Suivi & anticipation - Relations APP - OPS",
-          comment: "bla bla bla bla",
-          target: "ok",
-          edit: false
-        },
-        {
-          id: "9",
-          title: "Gestion des Régulations",
-          subtitle: "CTOT - Vols Suspendus - Dialogue Nice",
-          comment: "bla bla bla sdsds",
-          target: "progress",
-          edit: false
-        }
-      ],
+      sections: [ ],
       info: {
-        date: new Date(Date.UTC(2012, 11, 20, 3, 0, 0)),
+        date: new Date(),
         time: {
-            start: new Date('2018-11-06 08:00:00'),
-        end: new Date('2018-11-06 20:00:00')},
+            start: new Date(),
+        end: new Date(),
         student: "Melvin Diez",
         instructor: "ABC",
         complexity: "low",
@@ -144,7 +122,20 @@ class fileDetail extends Component {
         edit: false
       }
     }
+  }
   };
+
+  componentWillMount(){
+    axios.get('/files/' + this.props.match.params.id + '.json').then((res) => {
+      this.setState({
+        fileData: res.data
+      });
+    }).catch();
+  }
+
+  doSaveHandler (newData){
+    axios.put('/files/' + this.props.match.params.id + '.json', newData).then().catch();
+  }
 
   // SECTION HANDLERS
   //
@@ -154,9 +145,11 @@ class fileDetail extends Component {
 
   onSectionEditHandler(id) {
     const newData = { ...this.state.fileData };
+    let status = true;
     const newSections = newData.sections.map(section => {
       if (section.id === id) {
         section.edit = !section.edit;
+        status = section.edit;
       }
       return section;
     });
@@ -164,10 +157,14 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
+    if(!status){
+      this.doSaveHandler(newData);
+    }
   }
 
   onSectionChangeHandler(event, id) {
-    const newData = { ...this.state.fileData };
+    const newState = {...this.state}
+    const newData = { ...newState.fileData };
     const newSections = newData.sections.map(section => {
       if (section.id === id) {
         section.comment = event;
