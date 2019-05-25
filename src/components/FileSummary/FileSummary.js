@@ -10,6 +10,7 @@ import classes from "./FileSummary.module.css";
 import { CardActionArea } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import WeatherIcon from '../../components/UI/Icons/WeatherIcon/WeatherIcon';
+import WeatherShow from "../FileSectionComment/WeatherShow/WeatherShow";
 
 /*****************
  * This Component uses material-ui to
@@ -42,9 +43,9 @@ const fileSummary = props => {
         </Link>
       </CardActionArea>
       <CardActions className={classes.CardActions}>
-
         <LevelIcon label="Complexité" level={props.complexity} />
         <LevelIcon label="Traffic" level={props.traffic} />
+        <WeatherShow weather={props.weather} />
       </CardActions>
     </Card>
   );

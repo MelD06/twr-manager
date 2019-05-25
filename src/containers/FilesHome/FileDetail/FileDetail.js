@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Grid, Typography, Slide } from "@material-ui/core";
+import { Grid, Tabs, Tab, Slide, Paper } from "@material-ui/core";
 import classes from "./FileDetail.module.css";
 import InfoFile from "../../../components/InfoFile/InfoFile";
 import FileSectionComment from "../../../components/FileSectionComment/FileSectionComment";
 import FileSectionAdd from "../../../components/FileSectionComment/FileSectionAdd/FileSectionAdd";
-import axios from '../../../axios-instance';
+import axios from "../../../axios-instance";
+import DeleteDialog from "../../../hoc/DeleteDialog/DeleteDialog";
 
 const fileSections = [
   {
@@ -103,38 +104,45 @@ class fileDetail extends Component {
   state = {
     sectionToAdd: "",
     sections: [],
+    aboutToDelete: false,
     fileData: {
-      sections: [ ],
+      sections: [],
       info: {
         date: new Date(),
         time: {
-            start: new Date(),
-        end: new Date(),
-        student: "Melvin Diez",
-        instructor: "ABC",
-        complexity: "low",
-        traffic: "low",
-        weather: "cloudy",
-        windDirection: "east",
-        windSpeed: "low",
-        runways: ["17", "35", "04"],
-        positions: ["GND", "COOR", "LOC"],
-        edit: false
+          start: new Date(),
+          end: new Date(),
+          student: "Melvin Diez",
+          instructor: "ABC",
+          complexity: "low",
+          traffic: "low",
+          weather: "cloudy",
+          windDirection: "east",
+          windSpeed: "low",
+          runways: ["17", "35", "04"],
+          positions: ["GND", "COOR", "LOC"],
+          edit: false
+        }
       }
     }
-  }
   };
 
-  componentWillMount(){
-    axios.get('/files/' + this.props.match.params.id + '.json').then((res) => {
-      this.setState({
-        fileData: res.data
-      });
-    }).catch();
+  componentWillMount() {
+    axios
+      .get("/files/" + this.props.match.params.id + ".json")
+      .then(res => {
+        this.setState({
+          fileData: res.data
+        });
+      })
+      .catch();
   }
 
-  doSaveHandler (newData){
-    axios.put('/files/' + this.props.match.params.id + '.json', newData).then().catch();
+  doSaveHandler(newData) {
+    axios
+      .put("/files/" + this.props.match.params.id + ".json", newData)
+      .then()
+      .catch();
   }
 
   // SECTION HANDLERS
@@ -157,13 +165,13 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
-    if(!status){
+    if (!status) {
       this.doSaveHandler(newData);
     }
   }
 
   onSectionChangeHandler(event, id) {
-    const newState = {...this.state}
+    const newState = { ...this.state };
     const newData = { ...newState.fileData };
     const newSections = newData.sections.map(section => {
       if (section.id === id) {
@@ -233,7 +241,6 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
-    
   }
 
   // FILE-INFO HANDLERS
@@ -250,7 +257,7 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
-    if(!newInfo.edit){
+    if (!newInfo.edit) {
       this.doSaveHandler(newData);
     }
   }
@@ -258,9 +265,9 @@ class fileDetail extends Component {
   onInfoLevelChangeHandler(event) {
     const newData = { ...this.state.fileData };
     const newInfo = { ...newData.info };
-    if(event.target.name === 'complexity'){
+    if (event.target.name === "complexity") {
       newInfo.complexity = event.target.value;
-    } else if (event.target.name === 'traffic') {
+    } else if (event.target.name === "traffic") {
       newInfo.traffic = event.target.value;
     }
     newData.info = newInfo;
@@ -269,44 +276,7 @@ class fileDetail extends Component {
     });
   }
 
-  onInfoChangeHandler(event){
-    const newData = { ...this.state.fileData };
-    const newInfo = { ...newData.info };
-      newInfo[event.target.name] = event.target.value;
-    newData.info = newInfo;
-    this.setState({
-      fileData: newData
-    });
-    
-  }
-
-  onInfoDateChangeHandler(event){
-    const newData = { ...this.state.fileData };
-    const newInfo = { ...newData.info };
-    newInfo.date = event;
-    newData.info = newInfo;
-    this.setState({
-      fileData: newData
-    });
-    
-  }
-
-  onInfoTimeChangeHandler(event){
-    const newData = { ...this.state.fileData };
-    const newInfo = { ...newData.info };
-    if(event.target.id === 'beginTime'){
-      newInfo.time.start = event.target.value;
-    } else if (event.target.id === 'endTime') {
-      newInfo.time.end = event.target.value;
-    }
-    newData.info = newInfo;
-    this.setState({
-      fileData: newData
-    });
-    
-  }
-
-  onInfoMultiChangeHandler(event){
+  onInfoChangeHandler(event) {
     const newData = { ...this.state.fileData };
     const newInfo = { ...newData.info };
     newInfo[event.target.name] = event.target.value;
@@ -314,42 +284,90 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
-    
   }
 
-  onDeleteHandler(event){
-    axios.delete('/files/' + this.props.match.params.id + '.json').then(() => {
-      this.props.history.push('/files/');
-    }).catch(); //Error Management
+  onInfoDateChangeHandler(event) {
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    newInfo.date = event;
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+  }
+
+  onInfoTimeChangeHandler(event) {
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    if (event.target.id === "beginTime") {
+      newInfo.time.start = event.target.value;
+    } else if (event.target.id === "endTime") {
+      newInfo.time.end = event.target.value;
+    }
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+  }
+
+  onInfoMultiChangeHandler(event) {
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    newInfo[event.target.name] = event.target.value;
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+  }
+  onAbouttoDeleteHandler() {
+    this.setState(prevState => ({ aboutToDelete: !prevState.aboutToDelete }));
+  }
+
+  onDeleteHandler(event) {
+    axios
+      .delete("/files/" + this.props.match.params.id + ".json")
+      .then(() => {
+        this.props.history.push("/files/");
+      })
+      .catch(); //Error Management
   }
 
   render() {
     //Checks if value exists in database
-    if(!this.state.fileData){
-        return (<h1> Fiche inexistante. </h1>); //Moche
-      }
+    if (!this.state.fileData) {
+      return <h1> Fiche inexistante. </h1>; //Moche
+    }
 
-      const sections = this.state.fileData.sections.map(element => {
-        return (
-          <FileSectionComment
-            key={element.id}
-            id={element.id}
-            criterion={element.title}
-            subtitle={element.subtitle}
-            target={element.target}
-            comment={element.comment}
-            edit={element.edit}
-            sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
-            sectionDelete={() => this.onSectionDelete(element.id)}
-            sectionChange={event =>
-              this.onSectionChangeHandler(event, element.id)}
-            sectionChangeTarget={event =>
-              this.onSectionChangeTarget(element.id, event)}
-          />
-        );
-    }); 
-     
-  
+    const sections = this.state.fileData.sections.map(element => {
+      return (
+        <FileSectionComment
+          key={element.id}
+          id={element.id}
+          criterion={element.title}
+          subtitle={element.subtitle}
+          target={element.target}
+          comment={element.comment}
+          edit={element.edit}
+          sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
+          sectionDelete={() => this.onSectionDelete(element.id)}
+          sectionChange={event =>
+            this.onSectionChangeHandler(event, element.id)}
+          sectionChangeTarget={event =>
+            this.onSectionChangeTarget(element.id, event)}
+        />
+      );
+    });
+
+    let deleteDialog = (
+      <DeleteDialog
+        cancelDelete={() => this.onAbouttoDeleteHandler()}
+        doDelete={() => this.onDeleteHandler()}
+        what="cette fiche"
+      />
+    );
+    if (!this.state.aboutToDelete) {
+      deleteDialog = null;
+    }
 
     const usedIds = this.state.fileData.sections.map(element => {
       return [...Array(this.state.fileData.sections.length)].reduce(() => {
@@ -358,41 +376,52 @@ class fileDetail extends Component {
     });
 
     return (
-      <Slide direction="left" in={true} mountOnEnter unmountOnExit>
-        <Grid
-          container
-          spacing={16}
-          justify="center"
-          className={classes.FileDetail}
-        >
-          <Grid key="3" item md={4} xs={12}>
-            <InfoFile
-              data={this.state.fileData.info}
-              onEditToggle={() => this.onInfoEditHandler()}
-              onDateChange={(event) => this.onInfoDateChangeHandler(event)}
-              onLevelChange={(event) => this.onInfoChangeHandler(event)}
-              onWeatherChange={(event) => this.onInfoChangeHandler(event)}
-              onTimeChange={(event) => this.onInfoTimeChangeHandler(event)}
-              onMultiChange={(event) => this.onInfoMultiChangeHandler(event)}
-              onDelete={() => this.onDeleteHandler()}
-            />
+      <React.Fragment>
+        {deleteDialog}
+        <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+          <Grid
+            container
+            spacing={16}
+            justify="center"
+            className={classes.FileDetail}
+          >
+            <Grid key="3" item md={4} xs={12}>
+              <InfoFile
+                data={this.state.fileData.info}
+                onEditToggle={() => this.onInfoEditHandler()}
+                onDateChange={event => this.onInfoDateChangeHandler(event)}
+                onLevelChange={event => this.onInfoChangeHandler(event)}
+                onWeatherChange={event => this.onInfoChangeHandler(event)}
+                onTimeChange={event => this.onInfoTimeChangeHandler(event)}
+                onMultiChange={event => this.onInfoMultiChangeHandler(event)}
+                onDelete={() => this.onAbouttoDeleteHandler()}
+              />
+            </Grid>
+            <Grid key="2" item md={8} xs={12}>
+              <Paper square elevation={10}>
+                <Tabs
+                  value={0}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  onChange={null}
+                >
+                  <Tab label="Technique" />
+                  <Tab label="Comportement (En Cours)" disabled />
+                </Tabs>
+                {sections}
+              </Paper>
+              <FileSectionAdd
+                allSections={fileSections}
+                usedSections={usedIds}
+                sectionToAdd={this.state.sectionToAdd}
+                onAdd={() => this.onAddSectionDoHandler()}
+                sectionToAddChange={event =>
+                  this.onSectionToAddChangeHandler(event)}
+              />
+            </Grid>
           </Grid>
-          <Grid key="2" item md={8} xs={12}>
-            <Typography element="h3">
-              Technique / Comportement 2 onglets
-            </Typography>
-            {sections}
-            <FileSectionAdd
-              allSections={fileSections}
-              usedSections={usedIds}
-              sectionToAdd={this.state.sectionToAdd}
-              onAdd={() => this.onAddSectionDoHandler()}
-              sectionToAddChange={event =>
-                this.onSectionToAddChangeHandler(event)}
-            />
-          </Grid>
-        </Grid>
-      </Slide>
+        </Slide>
+      </React.Fragment>
     );
   }
 }

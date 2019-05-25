@@ -22,7 +22,7 @@ const WeatherShow = (props) => {
   }
 
     return ( 
-        <div className={classes.LevelIcon}>
+        <div className={classes.WeatherShow}>
           <label>Météo</label>
         <Tooltip title={tipTitle}>
           <WeatherIcon weather={props.weather} />

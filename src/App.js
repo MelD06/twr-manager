@@ -23,6 +23,7 @@ const theme = createMuiTheme({
   });
 
 function App() {
+  console.log(process.env)
   return (
     <MuiThemeProvider theme={theme} >
     <div className="App">
@@ -32,8 +33,8 @@ function App() {
         <NavBar />
         <main className="Content">
         <Switch>
-          <Route path="/files/" exact component={FilesHome} />
-          <Route path="/files/:id" component={FileDetail} />
+          <Route path={process.env.REACT_APP_PAGE_FILES} exact component={FilesHome} />
+          <Route path={process.env.REACT_APP_PAGE_FILES + ":id"} component={FileDetail} />
 
         </Switch>
         </main>

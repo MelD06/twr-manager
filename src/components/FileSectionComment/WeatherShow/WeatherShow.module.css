@@ -1,9 +1,10 @@
-.LevelIcon {
+.WeatherShow {
     margin: 20px 0 ;
     box-sizing: border-box;
+    align-self: center;
 }
 
-.LevelIcon label {
+.WeatherShow label {
     margin-right: 10px;
     margin-bottom: 5px; 
 }
