@@ -10,7 +10,7 @@ const NavBar = () => {
     <div className={classes.NavBar}>
       <AppBar position="fixed" >
         <Toolbar>
-          <Typography variant="title" color="inherit">
+          <Typography variant="h4" color="inherit">
             TWR-Manager
           </Typography>
         </Toolbar>

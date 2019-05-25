@@ -8,33 +8,7 @@ import { Grid } from '@material-ui/core';
 
 class FilesHome extends Component {
   state = {
-    files: [{
-      id: '0',
-      sections: [
-        {
-          id: "0",
-          title: "Commentaire Global",
-          comment: "",
-          edit: false
-        },
-      ],
-      info: {
-        date: '',
-        time: {
-            start: '',
-        end: ''},
-        student: "Melvin Diez",
-        instructor: "ABC",
-        complexity: "",
-        traffic: "",
-        weather: "",
-        windDirection: "",
-        windSpeed: "",
-        runways: [],
-        positions: [],
-        edit: false
-      }
-  }]
+    files: []
   };
 
   newFile() {
@@ -50,8 +24,8 @@ class FilesHome extends Component {
         info: {
           date: new Date(),
           time: {
-              start: new Date('2018-11-06 08:00:00'),
-          end: new Date('2018-11-06 20:00:00')},
+              start: '08:00',
+          end: '20:00'},
           student: "Melvin Diez",
           instructor: "ABC",
           complexity: "",
@@ -59,8 +33,8 @@ class FilesHome extends Component {
           weather: "",
           windDirection: "",
           windSpeed: "",
-          runways: [],
-          positions: [],
+          runways: ['17', '22'],
+          positions: ['GND'],
           edit: false
         }
       }

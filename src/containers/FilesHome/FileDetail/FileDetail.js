@@ -233,6 +233,7 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
+    
   }
 
   // FILE-INFO HANDLERS
@@ -249,16 +250,9 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
-  }
-
-  onInfoDateChangeHandler(event) {
-    const newData = { ...this.state.fileData };
-    const newInfo = { ...newData.info };
-    newInfo.date = event;
-    newData.info = newInfo;
-    this.setState({
-      fileData: newData
-    });
+    if(!newInfo.edit){
+      this.doSaveHandler(newData);
+    }
   }
 
   onInfoLevelChangeHandler(event) {
@@ -283,28 +277,79 @@ class fileDetail extends Component {
     this.setState({
       fileData: newData
     });
+    
+  }
+
+  onInfoDateChangeHandler(event){
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    newInfo.date = event;
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+    
+  }
+
+  onInfoTimeChangeHandler(event){
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    if(event.target.id === 'beginTime'){
+      newInfo.time.start = event.target.value;
+    } else if (event.target.id === 'endTime') {
+      newInfo.time.end = event.target.value;
+    }
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+    
+  }
+
+  onInfoMultiChangeHandler(event){
+    const newData = { ...this.state.fileData };
+    const newInfo = { ...newData.info };
+    newInfo[event.target.name] = event.target.value;
+    newData.info = newInfo;
+    this.setState({
+      fileData: newData
+    });
+    
+  }
+
+  onDeleteHandler(event){
+    axios.delete('/files/' + this.props.match.params.id + '.json').then(() => {
+      this.props.history.push('/files/');
+    }).catch(); //Error Management
   }
 
   render() {
-    const sections = this.state.fileData.sections.map(element => {
-      return (
-        <FileSectionComment
-          key={element.id}
-          id={element.id}
-          criterion={element.title}
-          subtitle={element.subtitle}
-          target={element.target}
-          comment={element.comment}
-          edit={element.edit}
-          sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
-          sectionDelete={() => this.onSectionDelete(element.id)}
-          sectionChange={event =>
-            this.onSectionChangeHandler(event, element.id)}
-          sectionChangeTarget={event =>
-            this.onSectionChangeTarget(element.id, event)}
-        />
-      );
-    });
+    //Checks if value exists in database
+    if(!this.state.fileData){
+        return (<h1> Fiche inexistante. </h1>); //Moche
+      }
+
+      const sections = this.state.fileData.sections.map(element => {
+        return (
+          <FileSectionComment
+            key={element.id}
+            id={element.id}
+            criterion={element.title}
+            subtitle={element.subtitle}
+            target={element.target}
+            comment={element.comment}
+            edit={element.edit}
+            sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
+            sectionDelete={() => this.onSectionDelete(element.id)}
+            sectionChange={event =>
+              this.onSectionChangeHandler(event, element.id)}
+            sectionChangeTarget={event =>
+              this.onSectionChangeTarget(element.id, event)}
+          />
+        );
+    }); 
+     
+  
 
     const usedIds = this.state.fileData.sections.map(element => {
       return [...Array(this.state.fileData.sections.length)].reduce(() => {
@@ -324,9 +369,12 @@ class fileDetail extends Component {
             <InfoFile
               data={this.state.fileData.info}
               onEditToggle={() => this.onInfoEditHandler()}
-              onDateChange={(event) => this.onInfoChangeHandler(event)}
+              onDateChange={(event) => this.onInfoDateChangeHandler(event)}
               onLevelChange={(event) => this.onInfoChangeHandler(event)}
               onWeatherChange={(event) => this.onInfoChangeHandler(event)}
+              onTimeChange={(event) => this.onInfoTimeChangeHandler(event)}
+              onMultiChange={(event) => this.onInfoMultiChangeHandler(event)}
+              onDelete={() => this.onDeleteHandler()}
             />
           </Grid>
           <Grid key="2" item md={8} xs={12}>

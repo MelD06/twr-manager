@@ -3,12 +3,6 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-  
-/* ICONS */
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Create";
 
 import LevelIcon from '../FileSectionComment/LevelShow/LevelShow';
  
@@ -48,18 +42,6 @@ const fileSummary = props => {
         </Link>
       </CardActionArea>
       <CardActions className={classes.CardActions}>
-      <div className={classes.AdminTools}> 
-        <Tooltip title="Supprimer">
-          <IconButton aria-label="Supprimer">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Éditer">
-          <IconButton aria-label="Edit">
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        </div>
 
         <LevelIcon label="Complexité" level={props.complexity} />
         <LevelIcon label="Traffic" level={props.traffic} />
