@@ -3,10 +3,13 @@ import classes from "./FilesHome.module.css";
 
 import FileSummary from "../../components/FileSummary/FileSummary";
 import Toolbar from "./Toolbar/Toolbar";
-import axios from "../../axios-instance";
+import Firebase from '../../firestore-instance';
 import { Grid } from "@material-ui/core";
 
+import 'firebase/firestore';
+
 class FilesHome extends Component {
+  db = Firebase.firestore();
   state = {
     files: []
   };
@@ -22,7 +25,7 @@ class FilesHome extends Component {
         }
       ],
       info: {
-        date: new Date(),
+        date: new Date().getTime(),
         time: {
           start: "08:00",
           end: "20:00"
@@ -39,31 +42,24 @@ class FilesHome extends Component {
         edit: false
       }
     };
-    axios
-      .post("/files.json", newFileGenerator)
-      .then(res => {
-        //res.data.name
-        this.props.history.push("/files/" + res.data.name);
-      })
-      .catch(); //TODO: Error Management
+
+      this.db.collection('files').add(newFileGenerator).then((res) => {
+        this.props.history.push("/files/" + res.id);
+      }).catch(); //TODO: Error Management
   }
 
   componentWillMount() {
-    axios
-      .get("/files.json")
-      .then(res => {
+    
+      this.db.collection('files').orderBy('info.date', 'desc').get().then(res => {
         const fileList = [];
-        const values = Object.values(res.data);
-        const keys = Object.keys(res.data);
-        keys.forEach((key, i) => {
+        res.forEach((doc) => {
           fileList.push({
-            id: key,
-            ...values[i]
+            id: doc.id,
+            ...doc.data()
           });
-        });
-        this.setState({ files: fileList });
-      })
-      .catch();
+        })
+        this.setState({files:fileList})
+        }).catch();
   }
 
   render() {
@@ -83,6 +79,7 @@ class FilesHome extends Component {
           weather={sum.info.weather}
           complexity={sum.info.complexity}
           traffic={sum.info.traffic}
+          student={sum.info.student}
         />
       );
     });

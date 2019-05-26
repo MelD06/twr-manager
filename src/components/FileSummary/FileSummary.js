@@ -4,12 +4,11 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 
-import LevelIcon from '../FileSectionComment/LevelShow/LevelShow';
- 
+import LevelIcon from "../FileSectionComment/LevelShow/LevelShow";
+
 import classes from "./FileSummary.module.css";
 import { CardActionArea } from "@material-ui/core";
-import { Link } from 'react-router-dom';
-import WeatherIcon from '../../components/UI/Icons/WeatherIcon/WeatherIcon';
+import { Link } from "react-router-dom";
 import WeatherShow from "../FileSectionComment/WeatherShow/WeatherShow";
 
 /*****************
@@ -18,28 +17,36 @@ import WeatherShow from "../FileSectionComment/WeatherShow/WeatherShow";
  * is clickable and leads to a file detail
  */
 const fileSummary = props => {
-
-
   return (
     <Card className={classes.Card}>
       <CardActionArea>
-        <Link to={'/files/' + props.id } className={classes.FileSummaryLink} >
-        <CardContent>
-        <div className={classes.TopSpread}>
-        <Typography
-            className={classes.title}
-            component="h2"
-            color="textSecondary"
-          >
-            {new Date(props.date).toLocaleDateString("fr-FR", {year: 'numeric', month:'long', day: 'numeric'})}
-          </Typography>
-          <WeatherIcon weather={props.weather} />
-        </div>
-          
-          <Typography>
-            {props.text.substring(0, 200) + "..."}
-          </Typography>
-        </CardContent>
+        <Link to={"/files/" + props.id} className={classes.FileSummaryLink}>
+          <CardContent>
+            <div className={classes.TopSpread}>
+              <Typography
+                className={classes.title}
+                component="h2"
+                color="textSecondary"
+              >
+                {new Date(props.date).toLocaleDateString("fr-FR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric"
+                })}
+              </Typography>
+              <Typography
+                className={classes.title}
+                component="h2"
+                color="textSecondary"
+              >
+                {props.student}
+              </Typography>
+            </div>
+
+            <Typography>
+              {props.text.substring(0, 200) + "..."}
+            </Typography>
+          </CardContent>
         </Link>
       </CardActionArea>
       <CardActions className={classes.CardActions}>

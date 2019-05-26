@@ -1,5 +1,4 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import SunnyIcon from "@material-ui/icons/WbSunny";
 import CloudyIcon from "@material-ui/icons/WbCloudy";
 import StormyIcon from "@material-ui/icons/FlashOn";

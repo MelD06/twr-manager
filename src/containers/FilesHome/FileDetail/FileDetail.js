@@ -4,8 +4,10 @@ import classes from "./FileDetail.module.css";
 import InfoFile from "../../../components/InfoFile/InfoFile";
 import FileSectionComment from "../../../components/FileSectionComment/FileSectionComment";
 import FileSectionAdd from "../../../components/FileSectionComment/FileSectionAdd/FileSectionAdd";
-import axios from "../../../axios-instance";
 import DeleteDialog from "../../../hoc/DeleteDialog/DeleteDialog";
+
+import 'firebase/firestore';
+import Firebase from '../../../firestore-instance';
 
 const fileSections = [
   {
@@ -101,6 +103,7 @@ const fileSections = [
 ];
 
 class fileDetail extends Component {
+  db = Firebase.firestore();
   state = {
     sectionToAdd: "",
     sections: [],
@@ -128,21 +131,18 @@ class fileDetail extends Component {
   };
 
   componentWillMount() {
-    axios
-      .get("/files/" + this.props.match.params.id + ".json")
-      .then(res => {
+
+      this.db.collection('files').doc(this.props.match.params.id).get().then((res) => {
         this.setState({
-          fileData: res.data
+          fileData: res.data()
         });
-      })
-      .catch();
+      }).catch({});
   }
 
   doSaveHandler(newData) {
-    axios
-      .put("/files/" + this.props.match.params.id + ".json", newData)
-      .then()
-      .catch();
+      this.db.collection('files').doc(this.props.match.params.id).set({...newData}).then((res) => {
+        console.log(res)
+      }).catch({});
   }
 
   // SECTION HANDLERS
@@ -289,7 +289,7 @@ class fileDetail extends Component {
   onInfoDateChangeHandler(event) {
     const newData = { ...this.state.fileData };
     const newInfo = { ...newData.info };
-    newInfo.date = event;
+    newInfo.date = event.getTime();
     newData.info = newInfo;
     this.setState({
       fileData: newData
@@ -323,13 +323,11 @@ class fileDetail extends Component {
     this.setState(prevState => ({ aboutToDelete: !prevState.aboutToDelete }));
   }
 
-  onDeleteHandler(event) {
-    axios
-      .delete("/files/" + this.props.match.params.id + ".json")
-      .then(() => {
+  onDeleteHandler() {
+
+      this.db.collection('files').doc(this.props.match.params.id).delete().then(() => {
         this.props.history.push("/files/");
-      })
-      .catch(); //Error Management
+      }).catch({}); //Error Management
   }
 
   render() {
