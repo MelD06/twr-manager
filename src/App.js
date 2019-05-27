@@ -5,29 +5,14 @@ import FilesHome from "./containers/FilesHome/FilesHome";
 import FileDetail from "./containers/FilesHome/FileDetail/FileDetail";
 import Drawer from "./components/Drawer/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles/';
+import { Route, Switch } from "react-router-dom";
 
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: [
-      "Roboto",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      "Segoe UI",
-      "Arial",
-      "sans-serif"
-    ].join(","),
-    useNextVariants: true
-  }
-  });
+
 
 function App() {
-  console.log(process.env)
+
   return (
-    <MuiThemeProvider theme={theme} >
     <div className="App">
-      <BrowserRouter>
         <CssBaseline />
         <Drawer />
         <NavBar />
@@ -38,9 +23,7 @@ function App() {
 
         </Switch>
         </main>
-      </BrowserRouter>
     </div>
-    </MuiThemeProvider>
   );
 }
 

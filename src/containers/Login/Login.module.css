@@ -1,0 +1,25 @@
+.Login {
+    width: 80%;
+    margin:auto;
+    position: fixed;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.Input{
+    margin: auto;
+}
+
+.Login Button {
+    position: relative;
+    left: 60%;
+    margin: 10px;
+}
+
+@media(min-width: 600px){
+    .Login{
+        width: 500px;
+    }
+}
