@@ -115,7 +115,7 @@ class fileDetail extends Component {
         date: new Date(),
         time: {
           start: new Date(),
-          end: new Date(),
+          end: new Date()},
           student: "Melvin Diez",
           instructor: "ABC",
           complexity: "low",
@@ -127,8 +127,7 @@ class fileDetail extends Component {
           positions: ["GND", "COOR", "LOC"],
           edit: false
         }
-      }
-    },
+      },
     userInfo: []
   };
 

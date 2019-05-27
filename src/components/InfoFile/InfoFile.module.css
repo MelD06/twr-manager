@@ -14,3 +14,16 @@ Future plans to stick the module on the upper right corner of the screen
         width: auto;
     }
 } */
+
+.InfoFile {
+    padding: 5px;
+}
+
+.RunwayAndPositionIcons{
+    display: flex;
+    flex-flow: row;
+    margin: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 15px 0;
+}

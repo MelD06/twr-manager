@@ -64,7 +64,7 @@ class App extends Component {
             path={process.env.REACT_APP_PAGE_FILES + ":id"}
             component={FileDetail}
           />
-          <Route path='/' exact render={() => <Spinner/>} />
+          <Route path='/' exact render={() => <p>Ouvrir le menu a gauche</p>} />
         </React.Fragment>
       );
     }

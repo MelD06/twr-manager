@@ -18,6 +18,8 @@ import SaveIcon from "@material-ui/icons/Save";
 import LevelSelector from "../UI/Menu/LevelSelector/LevelSelector";
 import WeatherSelector from "../UI/Menu/WeatherSelector/WeatherSelector";
 import MultiSelector from "../UI/Menu/MultiSelector/MultiSelector";
+import RunwayIcon from '../UI/Icons/RunwayIcon/RunwayIcon';
+import PositionIcon from '../UI/Icons/PositionIcon/PositionIcon';
 
 const infoFile = props => {
   let date = new Date(props.data.date).toLocaleDateString("fr-FR", {
@@ -32,8 +34,8 @@ const infoFile = props => {
   );
   let traffic = <LevelShow level={props.data.traffic} label="Trafic" />;
   let weather = <WeatherShow weather={props.data.weather} />;
-  let runways = props.data.runways;
-  let positions = props.data.positions;
+  let runways = props.data.runways.map((rwy) => <RunwayIcon key={rwy} rwy={rwy} />);
+  let positions = props.data.positions.map((pos) => <PositionIcon key={pos} position={pos} />);;
   let tools = (
     <React.Fragment >
     <Tooltip title="Éditer">
@@ -96,6 +98,9 @@ const infoFile = props => {
   if(!props.hasPower) {
     tools = null;
   }
+
+  if(props.data.runways){
+
   return (
     <Paper className={classes.InfoFile}>
       <Grid container spacing={8} justify="space-between">
@@ -118,13 +123,18 @@ const infoFile = props => {
         </Grid>
         {/* SECOND LINE */}
         <Grid key="parameters" item xs={6}>
-          {weather}
+          <div className={classes.RunwayAndPositionIcons}>
             {runways}
+          </div>
+          <div className={classes.RunwayAndPositionIcons}>
             {positions}
+          </div>
         </Grid>
         <Grid key="comptraf" item xs={6}>
           {complexity}
           {traffic}
+          {weather}
+          Vent 
         </Grid>
         <Grid key="tools" item xs={12}>
           {tools}
@@ -132,6 +142,9 @@ const infoFile = props => {
       </Grid>
     </Paper>
   );
+  } else {
+    return null;
+  }
 };
 
 export default infoFile;

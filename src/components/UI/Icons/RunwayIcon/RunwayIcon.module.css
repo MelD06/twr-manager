@@ -1,0 +1,15 @@
+.RunwayIcon {
+    width: 30px;
+    height: 30px;
+    background-color: rgb(39, 39, 39);
+    margin: 4px;
+    box-shadow: 1px 1px 4px black;
+    border-bottom: 5px dashed white;
+}
+
+.RunwayIcon span {
+    font-family: monospace;
+    color: white;
+    font-weight: bold;
+    font-size: 120%;
+}

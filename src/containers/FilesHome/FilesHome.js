@@ -40,7 +40,7 @@ class FilesHome extends Component {
         windDirection: "",
         windSpeed: "",
         runways: ["17", "22"],
-        positions: ["GND"],
+        positions: ["SOL"],
         edit: false
       }
     };
