@@ -4,14 +4,16 @@ import classes from "./FilesHome.module.css";
 import FileSummary from "../../components/FileSummary/FileSummary";
 import Toolbar from "./Toolbar/Toolbar";
 import Firebase from '../../firestore-instance';
-import { Grid } from "@material-ui/core";
+import { Grid, Slide } from "@material-ui/core";
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 import 'firebase/firestore';
 
 class FilesHome extends Component {
   db = Firebase.firestore();
   state = {
-    files: []
+    files: [],
+    userInfo: []
   };
 
   newFile() {
@@ -61,9 +63,9 @@ class FilesHome extends Component {
         this.setState({files:fileList})
         }).catch();
         //Get User Info
-        Firebase.auth().onAuthStateChanged((user) => {
-          console.log(user)
-        })
+         this.db.collection('users').doc(Firebase.auth().currentUser.uid).get().then((user) => {
+            this.setState({userInfo: user.data()});
+         }).catch();
   }
 
   render() {
@@ -78,6 +80,7 @@ class FilesHome extends Component {
 
       return (
         <FileSummary
+          key={sum.id}
           id={sum.id}
           date={sum.info.date}
           text={genCom}
@@ -89,14 +92,18 @@ class FilesHome extends Component {
       );
     });
     return (
+      <React.Fragment>
+      <Slide direction="left" in={true} mountOnEnter unmountOnExit>
       <Grid container spacing={16} className={classes.FilesHome}>
         <Grid item md={12} xs={12}>
-          <Toolbar newFile={() => this.newFile()} />
+          <Toolbar newFile={() => this.newFile()} hasPower={this.state.userInfo.hasPower}/>
         </Grid>
         <Grid item md={12} xs={12}>
-          {summaries}
+          {summaries ? summaries : <Spinner />}
         </Grid>
       </Grid>
+      </Slide>
+      </React.Fragment>
     );
   }
 }

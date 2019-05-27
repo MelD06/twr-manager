@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import "./App.css";
 import NavBar from "./components/NavBar/NavBar";
 import FilesHome from "./containers/FilesHome/FilesHome";
@@ -7,44 +7,86 @@ import Drawer from "./components/Drawer/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Route, Switch } from "react-router-dom";
 import Firebase from "./firestore-instance";
+import Spinner from './components/UI/Spinner/Spinner';
 
 import Login from "./components/Login/Login";
 
-function App() {
-  let connected = null;
-  Firebase.auth().onAuthStateChanged(user => connected = user);
+class App extends Component {
+  state = {
+    connected: false,
+    userInfo: [],
+    loaded:false,
+    navBarOpen:false
+  };
 
-  return (
-    <div className="App">
-      <CssBaseline />
-      <Drawer />
-      <NavBar />
+
+  componentWillMount() {
+    Firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          connected: true,
+          userInfo: user,
+          loaded:true
+        });
+      } else {
+        this.setState({
+          loaded:true
+        });
+      }
+    });
+  }
+
+  onDisconnect() {
+    Firebase.auth().signOut();
+    this.setState({
+      connected: false,
+      userInfo: []
+    });
+  }
+
+  onNavBarToggle() {
+    this.setState(prevState => ({
+      navBarOpen: !prevState.navBarOpen
+    }))
+  }
+
+  render() {
+    let routes = <Route component={Login} />;
+    if (this.state.connected) {
+      routes = (
+        <React.Fragment>
+          <Route
+            path={process.env.REACT_APP_PAGE_FILES}
+            exact
+            component={FilesHome}
+          />
+          <Route
+            path={process.env.REACT_APP_PAGE_FILES + ":id"}
+            component={FileDetail}
+          />
+          <Route path='/' exact render={() => <Spinner/>} />
+        </React.Fragment>
+      );
+    }
+
+    let content = <Spinner />;
+    if(this.state.loaded){
+      content = ( <React.Fragment> <NavBar user={this.state.userInfo.email} disconnect={() => this.onDisconnect()} menuToggle={() => this.onNavBarToggle()}/>
       <main className="Content">
         <Switch>
-          {/* {connected
-            ? <React.Fragment> */}
-                <Route
-                  path={process.env.REACT_APP_PAGE_FILES}
-                  exact
-                  component={FilesHome}
-                />
-                <Route
-                  path={process.env.REACT_APP_PAGE_FILES + ":id"}
-                  component={FileDetail}
-                />
-                <Route
-                exact
-                  render={() => <h1>Connecté</h1>}
-                />
-              {/* </React.Fragment>
-            : <Route
-            component={Login}
-          />} */}
-          
-        </Switch>
-      </main>
-    </div>
-  );
+          {routes}
+        </Switch></main></React.Fragment>);
+    }
+    return (
+      <div className="App">
+        <CssBaseline />
+        {this.state.connected && this.state.navBarOpen ? <Drawer /> : null}
+        {content}
+
+        
+      </div>
+    );
+  }
 }
 
 export default App;

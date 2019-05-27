@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import { Grid, Tabs, Tab, Slide, Paper } from "@material-ui/core";
+import { Grid, Tabs, Tab, Slide, Paper, Button } from "@material-ui/core";
 import classes from "./FileDetail.module.css";
 import InfoFile from "../../../components/InfoFile/InfoFile";
 import FileSectionComment from "../../../components/FileSectionComment/FileSectionComment";
 import FileSectionAdd from "../../../components/FileSectionComment/FileSectionAdd/FileSectionAdd";
 import DeleteDialog from "../../../hoc/DeleteDialog/DeleteDialog";
+import BackIcon from '@material-ui/icons/ArrowBackIos'
 
-import 'firebase/firestore';
-import Firebase from '../../../firestore-instance';
+import "firebase/firestore";
+import Firebase from "../../../firestore-instance";
 
 const fileSections = [
   {
@@ -127,22 +128,42 @@ class fileDetail extends Component {
           edit: false
         }
       }
-    }
+    },
+    userInfo: []
   };
 
   componentWillMount() {
-
-      this.db.collection('files').doc(this.props.match.params.id).get().then((res) => {
+    this.db
+      .collection("files")
+      .doc(this.props.match.params.id)
+      .get()
+      .then(res => {
         this.setState({
           fileData: res.data()
         });
-      }).catch({});
+      })
+      .catch({});
+
+    //Get User Info
+    this.db
+      .collection("users")
+      .doc(Firebase.auth().currentUser.uid)
+      .get()
+      .then(user => {
+        this.setState({ userInfo: user.data() });
+      })
+      .catch();
   }
 
   doSaveHandler(newData) {
-      this.db.collection('files').doc(this.props.match.params.id).set({...newData}).then((res) => {
-        console.log(res)
-      }).catch({});
+    this.db
+      .collection("files")
+      .doc(this.props.match.params.id)
+      .set({ ...newData })
+      .then(res => {
+        console.log(res);
+      })
+      .catch({});
   }
 
   // SECTION HANDLERS
@@ -324,10 +345,14 @@ class fileDetail extends Component {
   }
 
   onDeleteHandler() {
-
-      this.db.collection('files').doc(this.props.match.params.id).delete().then(() => {
+    this.db
+      .collection("files")
+      .doc(this.props.match.params.id)
+      .delete()
+      .then(() => {
         this.props.history.push("/files/");
-      }).catch({}); //Error Management
+      })
+      .catch({}); //Error Management
   }
 
   render() {
@@ -346,6 +371,7 @@ class fileDetail extends Component {
           target={element.target}
           comment={element.comment}
           edit={element.edit}
+          hasPower={this.state.userInfo.hasPower}
           sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
           sectionDelete={() => this.onSectionDelete(element.id)}
           sectionChange={event =>
@@ -373,16 +399,25 @@ class fileDetail extends Component {
       });
     });
 
+    let fileSectionAdd = (
+      <FileSectionAdd
+        allSections={fileSections}
+        usedSections={usedIds}
+        sectionToAdd={this.state.sectionToAdd}
+        onAdd={() => this.onAddSectionDoHandler()}
+        sectionToAddChange={event => this.onSectionToAddChangeHandler(event)}
+      />
+    );
+
+    if (!this.state.userInfo.hasPower) {
+      fileSectionAdd = null;
+    }
+
     return (
       <React.Fragment>
         {deleteDialog}
         <Slide direction="left" in={true} mountOnEnter unmountOnExit>
-          <Grid
-            container
-            spacing={16}
-            justify="center"
-            className={classes.FileDetail}
-          >
+          <Grid container spacing={16} className={classes.FileDetail}>
             <Grid key="3" item md={4} xs={12}>
               <InfoFile
                 data={this.state.fileData.info}
@@ -393,9 +428,10 @@ class fileDetail extends Component {
                 onTimeChange={event => this.onInfoTimeChangeHandler(event)}
                 onMultiChange={event => this.onInfoMultiChangeHandler(event)}
                 onDelete={() => this.onAbouttoDeleteHandler()}
+                hasPower={this.state.userInfo.hasPower}
               />
             </Grid>
-            <Grid key="2" item md={8} xs={12}>
+            <Grid key="2" item md={7} xs={12}>
               <Paper square elevation={10}>
                 <Tabs
                   value={0}
@@ -408,14 +444,15 @@ class fileDetail extends Component {
                 </Tabs>
                 {sections}
               </Paper>
-              <FileSectionAdd
-                allSections={fileSections}
-                usedSections={usedIds}
-                sectionToAdd={this.state.sectionToAdd}
-                onAdd={() => this.onAddSectionDoHandler()}
-                sectionToAddChange={event =>
-                  this.onSectionToAddChangeHandler(event)}
-              />
+              {fileSectionAdd}
+            </Grid>
+            <Grid key="back" item md={1} xs={12}>
+              <Button
+                size="small"
+                // onClick={this.props.history.goBack()} Buggin why ?
+              >
+                <BackIcon />
+              </Button>
             </Grid>
           </Grid>
         </Slide>

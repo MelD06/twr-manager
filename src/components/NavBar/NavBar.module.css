@@ -1,4 +1,10 @@
 .NavBar {
     z-index: 1201;
+    display: flex;
+    justify-content: space-between;
 }
 
+.UserArea {
+    position: fixed;
+    right: 2%;
+}

@@ -92,6 +92,10 @@ const infoFile = props => {
         </Button>
     )
   }
+
+  if(!props.hasPower) {
+    tools = null;
+  }
   return (
     <Paper className={classes.InfoFile}>
       <Grid container spacing={8} justify="space-between">

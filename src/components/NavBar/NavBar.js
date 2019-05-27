@@ -1,24 +1,29 @@
 import React from "react";
-import { Button, Toolbar, Typography, AppBar } from "@material-ui/core";
-import Firebase from "../../firestore-instance";
+import { Button, Toolbar, Typography, AppBar, IconButton } from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu';
+
 
 import classes from "./NavBar.module.css";
 
-const NavBar = () => {
-  const user = Firebase.auth().onAuthStateChanged(user => user);
+const NavBar = (props) => {
 
-  const disconnect = () => {
-    Firebase.auth().signOut();
-    console.log(user)
-  };
   return (
     <div className={classes.NavBar}>
       <AppBar position="fixed">
         <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="Menu" onClick={props.menuToggle} className={classes.MenuButton}>
+            <MenuIcon />
+          </IconButton>
           <Typography variant="h4" color="inherit">
             TWR-Manager
           </Typography>
-          {user ? <Button onClick={disconnect}>Deconnexion</Button> : null}
+          <div className={classes.UserArea}>
+          <span>
+          {props.user ? props.user : null}
+
+          </span>
+          {props.user ? <Button onClick={props.disconnect}>Deconnexion</Button> : null}
+          </div>
         </Toolbar>
       </AppBar>
     </div>

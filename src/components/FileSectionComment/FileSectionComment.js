@@ -62,12 +62,17 @@ const fileSectionComment = props => {
       </React.Fragment>
     );
     tooltip = null;
-    smiley = props.id === '0' ? null : (
-      <IconSelector
-        value={props.target}
-        changeTarget={props.sectionChangeTarget}
-      />
-    );
+    smiley =
+      props.id === "0"
+        ? null
+        : <IconSelector
+            value={props.target}
+            changeTarget={props.sectionChangeTarget}
+          />;
+  }
+
+  if (!props.hasPower) {
+    tooltip = null;
   }
 
   return (
