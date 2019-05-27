@@ -1,18 +1,24 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import { Button, Toolbar, Typography, AppBar } from "@material-ui/core";
+import Firebase from "../../firestore-instance";
 
 import classes from "./NavBar.module.css";
 
 const NavBar = () => {
+  const user = Firebase.auth().onAuthStateChanged(user => user);
+
+  const disconnect = () => {
+    Firebase.auth().signOut();
+    console.log(user)
+  };
   return (
     <div className={classes.NavBar}>
-      <AppBar position="fixed" >
+      <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h4" color="inherit">
             TWR-Manager
           </Typography>
+          {user ? <Button onClick={disconnect}>Deconnexion</Button> : null}
         </Toolbar>
       </AppBar>
     </div>

@@ -60,9 +60,14 @@ class FilesHome extends Component {
         })
         this.setState({files:fileList})
         }).catch();
+        //Get User Info
+        Firebase.auth().onAuthStateChanged((user) => {
+          console.log(user)
+        })
   }
 
   render() {
+
     const summaries = this.state.files.map(sum => {
       let genCom = "";
       sum.sections.forEach(section => {
