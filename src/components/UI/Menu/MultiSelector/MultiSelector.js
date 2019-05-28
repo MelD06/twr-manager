@@ -6,7 +6,7 @@ const MultiSelector = (props) => {
   let theSelection
   switch(props.type){
     case 'runways':
-    choices = ['04', '22', '17', '35'];
+    choices = ['17', '35', '04', '22'];
     break;
     case 'positions':
     choices = ['SOL', 'COOR', 'LOC1', 'LOC2'];

@@ -128,7 +128,7 @@ class fileDetail extends Component {
           edit: false
         }
       },
-    userInfo: []
+    isUserAdmin: false
   };
 
   componentWillMount() {
@@ -144,14 +144,10 @@ class fileDetail extends Component {
       .catch({});
 
     //Get User Info
-    this.db
-      .collection("users")
-      .doc(Firebase.auth().currentUser.uid)
-      .get()
-      .then(user => {
-        this.setState({ userInfo: user.data() });
-      })
-      .catch();
+    Firebase.auth().currentUser.getIdTokenResult().then((tokenResult) => {
+      this.setState({
+        isUserAdmin:tokenResult.claims.admin});
+    });
   }
 
   doSaveHandler(newData) {
@@ -370,7 +366,7 @@ class fileDetail extends Component {
           target={element.target}
           comment={element.comment}
           edit={element.edit}
-          hasPower={this.state.userInfo.hasPower}
+          hasPower={this.state.isUserAdmin}
           sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
           sectionDelete={() => this.onSectionDelete(element.id)}
           sectionChange={event =>
@@ -408,10 +404,9 @@ class fileDetail extends Component {
       />
     );
 
-    if (!this.state.userInfo.hasPower) {
+    if (!this.state.isUserAdmin) {
       fileSectionAdd = null;
     }
-
     return (
       <React.Fragment>
         {deleteDialog}
@@ -427,7 +422,7 @@ class fileDetail extends Component {
                 onTimeChange={event => this.onInfoTimeChangeHandler(event)}
                 onMultiChange={event => this.onInfoMultiChangeHandler(event)}
                 onDelete={() => this.onAbouttoDeleteHandler()}
-                hasPower={this.state.userInfo.hasPower}
+                hasPower={this.state.isUserAdmin}
               />
             </Grid>
             <Grid key="2" item md={7} xs={12}>
@@ -448,7 +443,7 @@ class fileDetail extends Component {
             <Grid key="back" item md={1} xs={12}>
               <Button
                 size="small"
-                // onClick={this.props.history.goBack()} Buggin why ?
+                 onClick={() => this.props.history.push(process.env.REACT_APP_PAGE_FILES)}
               >
                 <BackIcon />
               </Button>

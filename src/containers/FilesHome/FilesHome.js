@@ -13,7 +13,7 @@ class FilesHome extends Component {
   db = Firebase.firestore();
   state = {
     files: [],
-    userInfo: []
+    isUserAdmin: false
   };
 
   newFile() {
@@ -63,9 +63,10 @@ class FilesHome extends Component {
         this.setState({files:fileList})
         }).catch();
         //Get User Info
-         this.db.collection('users').doc(Firebase.auth().currentUser.uid).get().then((user) => {
-            this.setState({userInfo: user.data()});
-         }).catch();
+        Firebase.auth().currentUser.getIdTokenResult().then((tokenResult) => {
+          this.setState({
+            isUserAdmin:tokenResult.claims.admin});
+        });
   }
 
   render() {
@@ -96,7 +97,7 @@ class FilesHome extends Component {
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>
       <Grid container spacing={16} className={classes.FilesHome}>
         <Grid item md={12} xs={12}>
-          <Toolbar newFile={() => this.newFile()} hasPower={this.state.userInfo.hasPower}/>
+          <Toolbar newFile={() => this.newFile()} hasPower={this.state.isUserAdmin}/>
         </Grid>
         <Grid item md={12} xs={12}>
           {summaries ? summaries : <Spinner />}

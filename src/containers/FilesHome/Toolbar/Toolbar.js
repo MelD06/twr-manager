@@ -16,7 +16,7 @@ const Toolbar = props => {
   }
   return (
   <div className={classes.Toolbar}>
-    <Typography align="left">Page 1 de 20 sur 235 entrées</Typography>
+    <Typography align="left">Eleve :</Typography>
     {newButton}
 </div>)
 };

@@ -5,7 +5,7 @@ import FilesHome from "./containers/FilesHome/FilesHome";
 import FileDetail from "./containers/FilesHome/FileDetail/FileDetail";
 import Drawer from "./components/Drawer/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Firebase from "./firestore-instance";
 import Spinner from './components/UI/Spinner/Spinner';
 
@@ -16,12 +16,17 @@ class App extends Component {
     connected: false,
     userInfo: [],
     loaded:false,
-    navBarOpen:false
+    navBarOpen:true
   };
 
 
   componentWillMount() {
     Firebase.auth().onAuthStateChanged(user => {
+      if(Firebase.auth().currentUser){
+        Firebase.auth().currentUser.getIdToken(true)
+        console.log(Firebase.auth().currentUser.getIdTokenResult());
+
+      }
       if (user) {
         this.setState({
           connected: true,
@@ -63,8 +68,7 @@ class App extends Component {
           <Route
             path={process.env.REACT_APP_PAGE_FILES + ":id"}
             component={FileDetail}
-          />
-          <Route path='/' exact render={() => <p>Ouvrir le menu a gauche</p>} />
+          /> <Route path='/' exact component={FilesHome} />
         </React.Fragment>
       );
     }

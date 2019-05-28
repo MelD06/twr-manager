@@ -19,8 +19,8 @@ import WeatherShow from "../FileSectionComment/WeatherShow/WeatherShow";
 const fileSummary = props => {
   return (
     <Card className={classes.Card}>
+    <Link to={"/files/" + props.id} className={classes.FileSummaryLink}>
       <CardActionArea>
-        <Link to={"/files/" + props.id} className={classes.FileSummaryLink}>
           <CardContent>
             <div className={classes.TopSpread}>
               <Typography
@@ -47,8 +47,9 @@ const fileSummary = props => {
               {props.text.substring(0, 200) + "..."}
             </Typography>
           </CardContent>
-        </Link>
       </CardActionArea>
+
+      </Link>
       <CardActions className={classes.CardActions}>
         <LevelIcon label="Complexité" level={props.complexity} />
         <LevelIcon label="Traffic" level={props.traffic} />

@@ -4,7 +4,8 @@ import {
   FormControl,
   Select,
   MenuItem,
-  FormHelperText
+  FormHelperText,
+  OutlinedInput
 } from "@material-ui/core";
 
 import classes from './IconSelector.module.css';
@@ -20,11 +21,13 @@ const iconSelector = (props) => {
 
   return (
     <div className={classes.IconSelector}>
-      <FormControl>
+      
+      <FormControl variant="filled">
         <Select
           value={props.value}
           onChange={props.changeTarget}
           name="target"
+          input={<OutlinedInput name="age" id="outlined-age-simple" />}
         >
           {options}
         </Select>
