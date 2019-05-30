@@ -5,9 +5,10 @@ import FilesHome from "./containers/FilesHome/FilesHome";
 import FileDetail from "./containers/FilesHome/FileDetail/FileDetail";
 import Drawer from "./components/Drawer/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Firebase from "./firestore-instance";
 import Spinner from './components/UI/Spinner/Spinner';
+import Settings from './containers/Settings/Settings';
 
 import Login from "./components/Login/Login";
 
@@ -22,11 +23,11 @@ class App extends Component {
 
   componentWillMount() {
     Firebase.auth().onAuthStateChanged(user => {
-      if(Firebase.auth().currentUser){
-        Firebase.auth().currentUser.getIdToken(true)
-        console.log(Firebase.auth().currentUser.getIdTokenResult());
+      // if(Firebase.auth().currentUser){
+      //   Firebase.auth().currentUser.getIdToken(true)
+      //   console.log(Firebase.auth().currentUser.getIdTokenResult());
 
-      }
+      // }
       if (user) {
         this.setState({
           connected: true,
@@ -68,6 +69,10 @@ class App extends Component {
           <Route
             path={process.env.REACT_APP_PAGE_FILES + ":id"}
             component={FileDetail}
+          /> 
+          <Route
+            path={process.env.REACT_APP_PAGE_SETTINGS}
+            component={Settings}
           /> <Route path='/' exact component={FilesHome} />
         </React.Fragment>
       );
