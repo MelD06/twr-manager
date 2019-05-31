@@ -10,7 +10,11 @@ const Login = (props) => {
     const uiConfig = {
         signInSuccessUrl: '/',
         signInOptions: [
-          firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          {
+            provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            requireDisplayName: true,
+
+          },
           firebase.auth.PhoneAuthProvider.PROVIDER_ID
         ]
       };

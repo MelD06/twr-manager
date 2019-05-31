@@ -13,6 +13,7 @@ class FilesHome extends Component {
   db = Firebase.firestore();
   state = {
     files: [],
+    students: [],
     isUserAdmin: false
   };
 
@@ -48,10 +49,11 @@ class FilesHome extends Component {
       this.db.collection('files').add(newFileGenerator).then((res) => {
         this.props.history.push("/files/" + res.id);
       }).catch(); //TODO: Error Management
+
+
   }
 
-  componentWillMount() {
-    
+  componentDidMount() {
       this.db.collection('files').orderBy('info.date', 'desc').get().then(res => {
         const fileList = [];
         res.forEach((doc) => {
@@ -67,6 +69,8 @@ class FilesHome extends Component {
           this.setState({
             isUserAdmin:tokenResult.claims.admin});
         });
+        const studentsF = Firebase.functions().httpsCallable('getStudents');
+        studentsF().then((res) => this.setState({students: res.data}));
   }
 
   render() {
@@ -92,13 +96,18 @@ class FilesHome extends Component {
         />
       );
     });
+
+    let toolbar = null;
+    if(this.state.students){
+      toolbar = <Toolbar newFile={() => this.newFile()} hasPower={this.state.isUserAdmin} students={this.state.students} />;
+    }
     return (
       <React.Fragment>
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>
       <Grid container spacing={16} className={classes.FilesHome}>
         <Grid item md={12} xs={12}>
-          <Toolbar newFile={() => this.newFile()} hasPower={this.state.isUserAdmin}/>
-        </Grid>
+        {toolbar}
+         </Grid>
         <Grid item md={12} xs={12}>
           {summaries ? summaries : <Spinner />}
         </Grid>

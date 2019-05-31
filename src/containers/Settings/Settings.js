@@ -11,16 +11,22 @@ class Settings extends Component {
         users: []
     }
 
+    updateUserState () {
+        const usersGet = Firebase.functions().httpsCallable('getAllUsers');
+        usersGet({page: '0'}).then(res => this.setState({users: Object.values(res.data)}))   
+        
+    }
+
     componentDidMount() {
 
-       const usersGet = Firebase.functions().httpsCallable('getAllUsers');
-       usersGet({page: '1'}).then(res => this.setState({users: Object.values(res.data)}))   
-
+        this.updateUserState();
        
     }
 
     onSwitchUserAdmin (event) {
-        console.log(event.target.offsetParent.id) // Shite
+       const changeAdmin = Firebase.functions().httpsCallable('changeUserAdminStatus');
+       changeAdmin({userId: event.target.offsetParent.id, newRole: 'student', newAdminStatus: false}).then(res => console.log(res)) // Shite call
+        this.updateUserState();
     }
 
     render(){
