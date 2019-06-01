@@ -42,3 +42,8 @@
  display: flex;
  flex-flow: row;
 }
+
+.TooltipOrganizer {
+    height:80px;
+    margin:auto;
+}

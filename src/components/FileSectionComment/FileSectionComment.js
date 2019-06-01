@@ -22,7 +22,7 @@ const fileSectionComment = props => {
   );
 
   let tooltip = (
-    <React.Fragment>
+    <div className={classes.TooltipOrganizer} >
       <Tooltip title="Éditer">
         <IconButton aria-label="Edit" onClick={props.sectionToggleEdit}>
           <EditIcon />
@@ -35,7 +35,7 @@ const fileSectionComment = props => {
               <DeleteIcon />
             </IconButton>
           </Tooltip>}
-    </React.Fragment>
+    </div>
   );
 
   let smiley = <Smiley smiley={props.target} />;
@@ -83,10 +83,10 @@ const fileSectionComment = props => {
         justify="center"
         className={classes.FileSectionContainer}
       >
-        <Grid key="Edit" item xs={2} className={classes.Tools}>
+        <Grid key="Edit" item xs={3} className={classes.Tools}>
           {tooltip}
         </Grid>
-        <Grid key="Headlines" item xs={7} className={classes.Headlines}>
+        <Grid key="Headlines" item xs={6} className={classes.Headlines}>
           <Typography variant="h5" component="h3" className={classes.Headline}>
             {props.criterion}
             <br />
@@ -95,7 +95,7 @@ const fileSectionComment = props => {
             </span>
           </Typography>
         </Grid>
-        <Grid key="Targets" item xs={1}>
+        <Grid key="Targets" item xs={3}>
           {smiley}
         </Grid>
       </Grid>

@@ -14,6 +14,7 @@ class FilesHome extends Component {
   state = {
     files: [],
     students: [],
+    selectedStudent: null,
     isUserAdmin: false
   };
 
@@ -33,8 +34,8 @@ class FilesHome extends Component {
           start: "08:00",
           end: "20:00"
         },
-        student: "Melvin Diez",
-        instructor: "ABC",
+        student: this.state.selectedStudent.displayName,
+        instructor: Firebase.auth().currentUser.displayName,
         complexity: "",
         traffic: "",
         weather: "",
@@ -54,6 +55,10 @@ class FilesHome extends Component {
   }
 
   componentDidMount() {
+    const studentsF = Firebase.functions().httpsCallable('getStudents');
+
+    studentsF().then((students) => {
+
       this.db.collection('files').orderBy('info.date', 'desc').get().then(res => {
         const fileList = [];
         res.forEach((doc) => {
@@ -69,8 +74,18 @@ class FilesHome extends Component {
           this.setState({
             isUserAdmin:tokenResult.claims.admin});
         });
-        const studentsF = Firebase.functions().httpsCallable('getStudents');
-        studentsF().then((res) => this.setState({students: res.data}));
+      
+      this.setState({students: students.data, selectedStudent: students.data[0]});
+      
+    });
+      
+
+  }
+
+  onChangeStudent(event){
+    const newStudent = this.state.students.filter(st => st.email === event.target.value);
+    this.setState({selectedStudent: newStudent[0]})
+    console.log(newStudent)
   }
 
   render() {
@@ -99,8 +114,12 @@ class FilesHome extends Component {
 
     let toolbar = null;
     if(this.state.students){
-      toolbar = <Toolbar newFile={() => this.newFile()} hasPower={this.state.isUserAdmin} students={this.state.students} />;
+      toolbar = <Toolbar newFile={() => this.newFile()} hasPower={this.state.isUserAdmin} students={this.state.students} change={(event) => this.onChangeStudent(event)} selectedStudent={this.state.selectedStudent} />;
     }
+
+    if(this.state.files === [] || this.state.selectedStudent === null){
+      return <Spinner />;
+    } 
     return (
       <React.Fragment>
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>

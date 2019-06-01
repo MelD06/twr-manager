@@ -128,7 +128,8 @@ class fileDetail extends Component {
           edit: false
         }
       },
-    isUserAdmin: false
+    isUserAdmin: false,
+    studentList: null
   };
 
   componentWillMount() {
@@ -147,6 +148,12 @@ class fileDetail extends Component {
     Firebase.auth().currentUser.getIdTokenResult().then((tokenResult) => {
       this.setState({
         isUserAdmin:tokenResult.claims.admin});
+    });
+
+    
+    const studentsF = Firebase.functions().httpsCallable('getStudents');
+    studentsF().then((students) => {
+      this.setState({studentList: students.data});
     });
   }
 

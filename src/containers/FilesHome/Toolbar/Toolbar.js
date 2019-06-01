@@ -11,7 +11,7 @@ const Toolbar = props => {
   if(props.hasPower){
     newButton = (<Button variant="contained" size="small" className={classes.button} onClick={props.newFile}>
     <AddIcon className={classes.iconSmall} />
-    Nouveau
+    Nouvelle fiche pour {props.selectedStudent.displayName}
   </Button>);
   }
   return (
@@ -19,7 +19,7 @@ const Toolbar = props => {
         <FormControl >
           <InputLabel htmlFor="student">Etudiant</InputLabel>
           <Select
-            value={props.selectedStudent}
+            value={props.selectedStudent.email}
             onChange={props.change}
             name="student"
           >
