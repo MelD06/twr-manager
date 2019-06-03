@@ -18,15 +18,30 @@ class Settings extends Component {
     }
 
     componentDidMount() {
-
         this.updateUserState();
-       
     }
 
     onSwitchUserAdmin (event) {
        const changeAdmin = Firebase.functions().httpsCallable('changeUserAdminStatus');
-       changeAdmin({userId: event.target.offsetParent.id, newRole: 'student', newAdminStatus: false}).then(res => console.log(res)) // Shite call
-        this.updateUserState();
+       let newStatus = false;
+       let userDataset = {};
+       let newClaims = {};
+       const newUsers = this.state.users.map((user) => {
+        if(user.uid === event.target.name){
+            userDataset = {...user};
+            newStatus = !user.customClaims.admin;
+            newClaims = {
+                admin: newStatus,
+                newRole: 'student'
+            };
+            userDataset.customClaims = newClaims;
+            return userDataset;
+        } else {
+            return user;
+        }
+    })
+       changeAdmin({userId: event.target.name, newRole: 'student', newAdminStatus: newStatus}).then(res => console.log(res)) // Shite call
+        this.setState({users: newUsers});
     }
 
     render(){

@@ -39,12 +39,12 @@ const fileSummary = props => {
                 component="h2"
                 color="textSecondary"
               >
-                {props.student}
+                {props.instructor}
               </Typography>
             </div>
 
             <Typography>
-              {props.text.substring(0, 200) + "..."}
+              {props.text.substring(0, 200) + (props.text.length >= 199 ? "..." : '')}
             </Typography>
           </CardContent>
       </CardActionArea>

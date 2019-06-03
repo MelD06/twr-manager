@@ -9,8 +9,14 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 import 'firebase/firestore';
 
+
+
+
 class FilesHome extends Component {
   db = Firebase.firestore();
+  //Backend calls resolving admin privileges and student list
+  fileList = Firebase.functions().httpsCallable('getFileList');
+  studentsF = Firebase.functions().httpsCallable('getStudents');
   state = {
     files: [],
     students: [],
@@ -55,59 +61,41 @@ class FilesHome extends Component {
   }
 
   componentDidMount() {
-    const studentsF = Firebase.functions().httpsCallable('getStudents');
-
-    studentsF().then((students) => {
-
-      this.db.collection('files').orderBy('info.date', 'desc').get().then(res => {
-        const fileList = [];
-        res.forEach((doc) => {
-          fileList.push({
-            id: doc.id,
-            ...doc.data()
-          });
-        })
-        this.setState({files:fileList})
-        }).catch();
-        //Get User Info
-        Firebase.auth().currentUser.getIdTokenResult().then((tokenResult) => {
-          this.setState({
-            isUserAdmin:tokenResult.claims.admin});
+    this.fileList().then((res) => {
+      this.setState({isUserAdmin: res.data.hasPower, files: res.data.files});
+      console.log(res);
+      if(res.data.hasPower){
+        this.studentsF().then((students) => {
+          this.setState({students: students.data, selectedStudent: students.data[0]});
         });
-      
-      this.setState({students: students.data, selectedStudent: students.data[0]});
-      
+    
+      }
     });
-      
-
   }
 
   onChangeStudent(event){
     const newStudent = this.state.students.filter(st => st.email === event.target.value);
     this.setState({selectedStudent: newStudent[0]})
+    this.fileList({user: this.state.selectedStudent.email}).then((res) => {
+      this.setState({ files: res.data.files });
+    });
     console.log(newStudent)
   }
 
   render() {
-
+    console.log(this.state.files);
     const summaries = this.state.files.map(sum => {
-      let genCom = "";
-      sum.sections.forEach(section => {
-        if (section.id === "0") {
-          genCom = section.comment;
-        }
-      });
 
       return (
         <FileSummary
           key={sum.id}
           id={sum.id}
           date={sum.info.date}
-          text={genCom}
+          text={sum.genComment}
           weather={sum.info.weather}
           complexity={sum.info.complexity}
           traffic={sum.info.traffic}
-          student={sum.info.student}
+          instructor={sum.info.instructor}
         />
       );
     });
