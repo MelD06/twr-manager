@@ -1,40 +1,31 @@
 
 
 import React from 'react';
-import {FormControl, InputLabel, Select, MenuItem} from '@material-ui/core';
+import {FormControl, Select, MenuItem} from '@material-ui/core';
 
 /**************
  * Multi purpose selector
  * requires: 
- * - props.choicesValues 
- * - props.choicesNames
+ * - props.choices
  * - props.change
  * - props.selection
+ * - props.name
  * - props.type
  */
 
 const MetaSelector = (props) => {
-  let theSelection;
-  //Corrects a crash if selection is empty
-  theSelection = props.selection ? props.selection : null ;
-
-  const choices = props.choicesNames.map((el, i) => [el, props.choicesValues[i]]);
-
   return (
-    <FormControl >
-          <InputLabel htmlFor={props.type}>{props.type}</InputLabel>
           <Select
-            value={theSelection}
+            value={props.selection}
             onChange={props.change}
-            name={props.type}
+            name={props.name}
           >
-            {choices.map(choice => (
-              <MenuItem key={choice[1]} value={choice[1]} >
-                {choice[0]}
+            {props.choices.map(choice => (
+              <MenuItem key={choice[0]} value={choice[0]} >
+                {choice[1]}
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
   )
 }
 
