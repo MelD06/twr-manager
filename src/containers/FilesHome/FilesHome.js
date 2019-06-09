@@ -10,8 +10,6 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import 'firebase/firestore';
 
 
-
-
 class FilesHome extends Component {
   db = Firebase.firestore();
   //Backend calls resolving admin privileges and student list
@@ -20,8 +18,9 @@ class FilesHome extends Component {
   state = {
     files: [],
     students: [],
-    selectedStudent: null,
-    isUserAdmin: false
+    selectedStudent: Firebase.auth().currentUser.email,
+    userRole: '',
+    loaded: false
   };
 
   newFile() {
@@ -62,28 +61,29 @@ class FilesHome extends Component {
 
   componentDidMount() {
     this.fileList().then((res) => {
-      this.setState({isUserAdmin: res.data.hasPower, files: res.data.files});
-      console.log(res);
-      if(res.data.hasPower){
+      this.setState({userRole: res.data.userRole, files: res.data.files});
+      if(res.data.userRole === 'admin' || res.data.userRole === 'instructor'){
         this.studentsF().then((students) => {
           this.setState({students: students.data, selectedStudent: students.data[0]});
         });
-    
       }
+      this.updateFileList(this.state.selectedStudent);
     });
   }
 
   onChangeStudent(event){
     const newStudent = this.state.students.filter(st => st.email === event.target.value);
-    this.setState({selectedStudent: newStudent[0]})
-    this.fileList({user: this.state.selectedStudent.email}).then((res) => {
-      this.setState({ files: res.data.files });
+    this.setState({selectedStudent: newStudent[0], loaded:false});
+    this.updateFileList(newStudent[0]);
+  }
+
+  updateFileList(email){
+    this.fileList({user: email}).then((res) => {
+      this.setState({ files: res.data.files, loaded:true });
     });
-    console.log(newStudent)
   }
 
   render() {
-    console.log(this.state.files);
     const summaries = this.state.files.map(sum => {
 
       return (
@@ -101,11 +101,11 @@ class FilesHome extends Component {
     });
 
     let toolbar = null;
-    if(this.state.students){
+    if(this.state.students !== [] && this.state.userRole !== 'student'){
       toolbar = <Toolbar newFile={() => this.newFile()} hasPower={this.state.isUserAdmin} students={this.state.students} change={(event) => this.onChangeStudent(event)} selectedStudent={this.state.selectedStudent} />;
     }
 
-    if(this.state.files === [] || this.state.selectedStudent === null){
+    if(!this.state.loaded){
       return <Spinner />;
     } 
     return (
@@ -116,7 +116,7 @@ class FilesHome extends Component {
         {toolbar}
          </Grid>
         <Grid item md={12} xs={12}>
-          {summaries ? summaries : <Spinner />}
+          {summaries}
         </Grid>
       </Grid>
       </Slide>

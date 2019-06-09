@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import {FormControl, Select, MenuItem} from '@material-ui/core';
+import {Select, MenuItem} from '@material-ui/core';
 
 /**************
  * Multi purpose selector

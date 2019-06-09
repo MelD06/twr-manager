@@ -1,5 +1,5 @@
 import React from 'react';
-import {Paper, Typography, Grid, Button, Table, TableHead, TableRow, TableBody, TableCell, Switch} from '@material-ui/core';
+import {Paper, Typography, Table, TableHead, TableRow, TableBody, TableCell, Switch} from '@material-ui/core';
 import MetaSelector from '../../../components/UI/Menu/MetaSelector/MetaSelector';
 // import MaterialTable from 'material-table';
 

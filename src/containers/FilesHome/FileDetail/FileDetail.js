@@ -5,7 +5,7 @@ import InfoFile from "../../../components/InfoFile/InfoFile";
 import FileSectionComment from "../../../components/FileSectionComment/FileSectionComment";
 import FileSectionAdd from "../../../components/FileSectionComment/FileSectionAdd/FileSectionAdd";
 import DeleteDialog from "../../../hoc/DeleteDialog/DeleteDialog";
-import BackIcon from '@material-ui/icons/ArrowBackIos'
+import BackIcon from "@material-ui/icons/ArrowBackIos";
 
 import "firebase/firestore";
 import Firebase from "../../../firestore-instance";
@@ -115,19 +115,20 @@ class fileDetail extends Component {
         date: new Date(),
         time: {
           start: new Date(),
-          end: new Date()},
-          student: "Melvin Diez",
-          instructor: "ABC",
-          complexity: "low",
-          traffic: "low",
-          weather: "cloudy",
-          windDirection: "east",
-          windSpeed: "low",
-          runways: ["17", "35", "04"],
-          positions: ["GND", "COOR", "LOC"],
-          edit: false
-        }
-      },
+          end: new Date()
+        },
+        student: "Melvin Diez",
+        instructor: "ABC",
+        complexity: "low",
+        traffic: "low",
+        weather: "cloudy",
+        windDirection: "east",
+        windSpeed: "low",
+        runways: ["17", "35", "04"],
+        positions: ["GND", "COOR", "LOC"],
+        edit: false
+      }
+    },
     isUserAdmin: false,
     studentList: null
   };
@@ -145,16 +146,22 @@ class fileDetail extends Component {
       .catch({});
 
     //Get User Info
-    Firebase.auth().currentUser.getIdTokenResult().then((tokenResult) => {
-      this.setState({
-        isUserAdmin:tokenResult.claims.admin});
-    });
-
-    
-    const studentsF = Firebase.functions().httpsCallable('getStudents');
-    studentsF().then((students) => {
-      this.setState({studentList: students.data});
-    });
+    Firebase.auth()
+      .currentUser.getIdTokenResult()
+      .then(tokenResult => {
+        this.setState({
+          isUserAdmin: tokenResult.claims.admin
+        });
+        return tokenResult.claims;
+      })
+      .then(claims => {
+        if (claims.role === "admin") {
+          const studentsF = Firebase.functions().httpsCallable("getStudents");
+          studentsF().then(students => {
+            this.setState({ studentList: students.data });
+          });
+        }
+      });
   }
 
   doSaveHandler(newData) {
@@ -450,7 +457,8 @@ class fileDetail extends Component {
             <Grid key="back" item md={1} xs={12}>
               <Button
                 size="small"
-                 onClick={() => this.props.history.push(process.env.REACT_APP_PAGE_FILES)}
+                onClick={() =>
+                  this.props.history.push(process.env.REACT_APP_PAGE_FILES)}
               >
                 <BackIcon />
               </Button>

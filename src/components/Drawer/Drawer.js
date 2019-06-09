@@ -60,11 +60,11 @@ class ResponsiveDrawer extends React.Component {
               <ListItemIcon><MailIcon /></ListItemIcon>
               <ListItemText primary='Fiches de Suivi' />
             </ListItem></Link>
-            <Link to={null} className={classes.noStyle}>
+            {/* <Link to={null} className={classes.noStyle}>
             <ListItem button key='Consignes'>
               <ListItemIcon><MailIcon /></ListItemIcon>
               <ListItemText primary='Consignes' />
-            </ListItem></Link>
+            </ListItem></Link> */}
         </List>
         <Divider />
         <List>

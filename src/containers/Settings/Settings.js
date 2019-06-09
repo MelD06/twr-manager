@@ -5,8 +5,8 @@ import "firebase/firestore";
 import "firebase/functions";
 import Firebase from "../../firestore-instance";
 import UserList from "../../components/Settings/UserList/UserList";
-import Spinner from "../../components/UI/Spinner/Spinner";
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+// import Spinner from "../../components/UI/Spinner/Spinner";
+// import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 const statuses = [
   ["student", "étudiant"],
@@ -16,7 +16,8 @@ const statuses = [
 
 class Settings extends Component {
   state = {
-    users: []
+    users: [],
+    userRole: ''
   };
 
   updateUserState() {
@@ -27,7 +28,12 @@ class Settings extends Component {
   }
 
   componentDidMount() {
-    this.updateUserState();
+    Firebase.auth().currentUser.getIdTokenResult().then(user => {
+      this.setState({userRole: user.claims.role});
+      if(user.claims.role === 'admin'){
+        this.updateUserState();
+      }
+    })
   }
 
   onSwitchUserSettings(event, isRole) {
@@ -67,26 +73,26 @@ class Settings extends Component {
   }
 
   render() {
-    let list = <Spinner />;
-    if (this.state.users != []) {
+    let list = null;
+    if (this.state.users !== [] && this.state.userRole === 'admin') {
       list = (
+        <Paper>
         <UserList
           statuses={statuses}
           users={this.state.users}
           onSwitchAdmin={event => this.onSwitchUserSettings(event, false)}
           onChangeRole={event => this.onSwitchUserSettings(event, true)}
         />
+        </Paper>
       );
     }
     return (
       <React.Fragment>
         <Typography>Parametres utilisateurs</Typography>
-        <Paper>
           {list}
-        </Paper>
       </React.Fragment>
     );
   }
 }
 
-export default withErrorHandler(Settings);
+export default Settings;
