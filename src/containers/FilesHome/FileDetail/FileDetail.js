@@ -14,100 +14,126 @@ const fileSections = [
   {
     sectionId: "1",
     title: "Relèves - Prise de Service",
-    subtitle: "Consignes, relève entrante & sortante"
+    subtitle: "Consignes, relève entrante & sortante",
+    type: 'technical'
   },
   {
     sectionId: "2",
     title: "Equipements, connaissance, utilisation matériel",
-    subtitle: "Radio - VIGIE - Balisage - Platine RDO/TEL"
+    subtitle: "Radio - VIGIE - Balisage - Platine RDO/TEL",
+    type: 'technical'
   },
   {
     sectionId: "3",
     title: "ATIS",
-    subtitle: "Utilisation de l'outil & des informations"
+    subtitle: "Utilisation de l'outil & des informations",
+    type: 'technical'
   },
   {
     sectionId: "4",
     title: "Tenue de strips et Tableau",
-    subtitle: "Exploitation - Gestion - Soin"
+    subtitle: "Exploitation - Gestion - Soin",
+    type: 'technical'
   },
   {
     sectionId: "5",
     title: "Phraséologie",
-    subtitle: "Français - Anglais - Anti-Incursion - Info de trafic"
+    subtitle: "Français - Anglais - Anti-Incursion - Info de trafic",
+    type: 'technical'
   },
   {
     sectionId: "6",
     title: "Boucle de collationnement",
-    subtitle: "Ecoute, vérification & exigence"
+    subtitle: "Ecoute, vérification & exigence",
+    type: 'technical'
   },
   {
     sectionId: "7",
     title: "Respect règlementaire et consignes",
-    subtitle: "Nationale - Manex - LOAs"
+    subtitle: "Nationale - Manex - LOAs",
+    type: 'technical'
   },
   {
     sectionId: "8",
     title: "Connaissance Plateforme",
-    subtitle: "HS - Parking - Moyens - Inspection de Piste"
+    subtitle: "HS - Parking - Moyens - Inspection de Piste",
+    type: 'technical'
   },
   {
     sectionId: "9",
     title: "Gestion des Régulations",
-    subtitle: "CTOT - Vols Suspendus - Dialogue Nice"
+    subtitle: "CTOT - Vols Suspendus - Dialogue Nice",
+    type: 'technical'
   },
   {
     sectionId: "10",
     title: "Gestion des départs",
-    subtitle: "Stratégie & Suivi - Mise en route"
+    subtitle: "Stratégie & Suivi - Mise en route",
+    type: 'technical'
   },
   {
     sectionId: "11",
     title: "Gestion des arrivées",
-    subtitle: "Suivi & anticipation - Relations APP - OPS"
+    subtitle: "Suivi & anticipation - Relations APP - OPS",
+    type: 'technical'
   },
   {
     sectionId: "12",
     title: "Gestion du Circuit",
-    subtitle: " "
+    subtitle: " ",
+    type: 'technical'
   },
   {
     sectionId: "13",
     title: "Changement de configuration",
-    subtitle: "Anticipation - Actions"
+    subtitle: "Anticipation - Actions",
+    type: 'technical'
   },
   {
     sectionId: "14",
     title: "Gestion des vols VFR",
-    subtitle: "Plan de vol - Info de Trafic - VFR/S - VFR de nuit"
+    subtitle: "Plan de vol - Info de Trafic - VFR/S - VFR de nuit",
+    type: 'technical'
   },
   {
     sectionId: "15",
     title: "Surveillance aire de manoeuvre",
-    subtitle: "Regarder Dehors"
+    subtitle: "Regarder Dehors",
+    type: 'technical'
   },
   {
     sectionId: "16",
     title: "Gestion des vols H",
-    subtitle: "Plateforme - Quai du Large"
+    subtitle: "Plateforme - Quai du Large",
+    type: 'technical'
   },
   {
     sectionId: "17",
     title: "Situations Inhabituelles",
-    subtitle: "Pannes - Vent Fort - FNE"
+    subtitle: "Pannes - Vent Fort - FNE",
+    type: 'technical'
   },
   {
     sectionId: "18",
     title: "Détection des conflits",
-    subtitle: " "
+    subtitle: " ",
+    type: 'technical'
+  },
+  {
+    sectionId: "19",
+    title: "Section Comportement",
+    subtitle: "sub",
+    type: 'behavior'
   }
 ];
 
 class fileDetail extends Component {
   db = Firebase.firestore();
+  emailToName = Firebase.functions().httpsCallable('emailToName');
   state = {
     sectionToAdd: "",
     sections: [],
+    currentType: 'technique',
     aboutToDelete: false,
     fileData: {
       sections: [],
@@ -135,9 +161,14 @@ class fileDetail extends Component {
 
   componentWillMount() {
       const getFile = Firebase.functions().httpsCallable('getFile');
-      getFile({file: this.props.match.params.id}).then(res => this.setState({
-        fileData: res.data
-      }));
+      getFile({file: this.props.match.params.id}).then(res => {
+        this.emailToName({email: res.data.info.student}).then(name => {
+          res.data.info.student = name.data;
+          this.setState({
+            fileData: res.data
+          })
+        }).catch();
+        });
 
     //Get User Info
     Firebase.auth()
@@ -167,6 +198,16 @@ class fileDetail extends Component {
         console.log(res);
       })
       .catch({});
+  }
+
+  // TAB MANAGEMENT
+  //
+  //
+  //
+  ////////////////////////
+
+  onTabChangeHandler(event) {
+    this.setState({currentType: event.target.textContent});
   }
 
   // SECTION HANDLERS
@@ -358,6 +399,7 @@ class fileDetail extends Component {
       .catch({}); //Error Management
   }
 
+
   render() {
     //Checks if value exists in database
     if (!this.state.fileData) {
@@ -436,13 +478,13 @@ class fileDetail extends Component {
             <Grid key="2" item md={7} xs={12}>
               <Paper square elevation={10}>
                 <Tabs
-                  value={0}
+                  value={this.state.currentType}
                   indicatorColor="primary"
                   textColor="primary"
-                  onChange={null}
+                  onChange={(event) => this.onTabChangeHandler(event)}
                 >
-                  <Tab label="Technique" />
-                  <Tab label="Comportement (En Cours)" disabled />
+                  <Tab label="technique" value="technique"/>
+                  <Tab label="comportement" value="comportement"/>
                 </Tabs>
                 {sections}
               </Paper>

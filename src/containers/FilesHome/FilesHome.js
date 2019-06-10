@@ -39,8 +39,8 @@ class FilesHome extends Component {
           start: "08:00",
           end: "20:00"
         },
-        student: this.state.selectedStudent.displayName,
-        instructor: Firebase.auth().currentUser.displayName,
+        student: this.state.selectedStudent.email,
+        instructor: Firebase.auth().currentUser.email,
         complexity: "",
         traffic: "",
         weather: "",
@@ -63,6 +63,7 @@ class FilesHome extends Component {
     Firebase.auth().currentUser.getIdTokenResult().then((user) => {
       return user.claims.role;
     }).then((curUserRole) => {
+      this.setState({userRole: curUserRole});
       if(curUserRole === 'admin' || curUserRole === 'instructor'){
         this.studentsF().then((students) => {
           this.setState({students: students.data, selectedStudent: students.data[0]});
@@ -83,7 +84,6 @@ class FilesHome extends Component {
 
   updateFileList(email){
     this.fileList({user: email}).then((res) => {
-      console.log(res)
       this.setState({ files: res.data.files, loaded:true });
     });
   }
@@ -107,9 +107,8 @@ class FilesHome extends Component {
 
     let toolbar = null;
     if(this.state.students !== [] && this.state.userRole !== 'student'){
-      toolbar = <Toolbar newFile={() => this.newFile()} hasPower={this.state.isUserAdmin} students={this.state.students} change={(event) => this.onChangeStudent(event)} selectedStudent={this.state.selectedStudent} />;
+      toolbar = <Toolbar newFile={() => this.newFile()} students={this.state.students} change={(event) => this.onChangeStudent(event)} selectedStudent={this.state.selectedStudent} />;
     }
-
     if(!this.state.loaded){
       return <Spinner />;
     } 

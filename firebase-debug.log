@@ -1,0 +1,13 @@
+[debug] [2019-06-10T12:39:13.948Z] ----------------------------------------------------------------------
+[debug] [2019-06-10T12:39:13.953Z] Command:       /usr/bin/node /usr/bin/firebase deploy
+[debug] [2019-06-10T12:39:13.954Z] CLI Version:   6.11.0
+[debug] [2019-06-10T12:39:13.954Z] Platform:      linux
+[debug] [2019-06-10T12:39:13.954Z] Node Version:  v11.15.0
+[debug] [2019-06-10T12:39:13.955Z] Time:          Mon Jun 10 2019 14:39:13 GMT+0200 (Central European Summer Time)
+[debug] [2019-06-10T12:39:13.955Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-10T12:39:13.972Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-10T12:39:13.972Z] > authorizing via signed-in user
+[debug] [2019-06-10T12:39:13.972Z] [iam] checking project twr-manager for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-06-10T12:39:13.976Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/twr-manager:testIamPermissions  
+

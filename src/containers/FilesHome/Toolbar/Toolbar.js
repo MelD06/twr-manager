@@ -6,32 +6,33 @@ import AddIcon from "@material-ui/icons/AddCircle";
 import classes from "./Toolbar.module.css";
 
 const Toolbar = props => {
-
-  let newButton = null;
-  if(props.hasPower){
-    newButton = (<Button variant="contained" size="small" className={classes.button} onClick={props.newFile}>
-    <AddIcon className={classes.iconSmall} />
-    Nouvelle fiche pour {props.selectedStudent.displayName}
-  </Button>);
-  }
   return (
-  <div className={classes.Toolbar}>
-        <FormControl >
-          <InputLabel htmlFor="student">Etudiant</InputLabel>
-          <Select
-            value={props.selectedStudent.email}
-            onChange={props.change}
-            name="student"
-          >
-            {props.students.map(student => (
-              <MenuItem key={student.email} value={student.email} >
-                {student.displayName}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-    {newButton}
-</div>)
+    <div className={classes.Toolbar}>
+      <FormControl>
+        <InputLabel htmlFor="student">Etudiant</InputLabel>
+        <Select
+          value={props.selectedStudent.email}
+          onChange={props.change}
+          name="student"
+        >
+          {props.students.map(student =>
+            <MenuItem key={student.email} value={student.email}>
+              {student.displayName}
+            </MenuItem>
+          )}
+        </Select>
+      </FormControl>
+      <Button
+        variant="contained"
+        size="small"
+        className={classes.button}
+        onClick={props.newFile}
+      >
+        <AddIcon className={classes.iconSmall} />
+        Nouvelle fiche pour {props.selectedStudent.displayName}
+      </Button>
+    </div>
+  );
 };
 
 export default Toolbar;
