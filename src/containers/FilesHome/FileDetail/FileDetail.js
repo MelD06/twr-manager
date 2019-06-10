@@ -134,16 +134,10 @@ class fileDetail extends Component {
   };
 
   componentWillMount() {
-    this.db
-      .collection("files")
-      .doc(this.props.match.params.id)
-      .get()
-      .then(res => {
-        this.setState({
-          fileData: res.data()
-        });
-      })
-      .catch({});
+      const getFile = Firebase.functions().httpsCallable('getFile');
+      getFile({file: this.props.match.params.id}).then(res => this.setState({
+        fileData: res.data
+      }));
 
     //Get User Info
     Firebase.auth()

@@ -60,15 +60,19 @@ class FilesHome extends Component {
   }
 
   componentDidMount() {
-    this.fileList().then((res) => {
-      this.setState({userRole: res.data.userRole, files: res.data.files});
-      if(res.data.userRole === 'admin' || res.data.userRole === 'instructor'){
+    Firebase.auth().currentUser.getIdTokenResult().then((user) => {
+      return user.claims.role;
+    }).then((curUserRole) => {
+      if(curUserRole === 'admin' || curUserRole === 'instructor'){
         this.studentsF().then((students) => {
           this.setState({students: students.data, selectedStudent: students.data[0]});
-        });
+          this.updateFileList(students.data[0].email)
+        }).catch();
+      } else {
+        this.updateFileList(null);
       }
-      this.updateFileList(this.state.selectedStudent);
-    });
+    })
+
   }
 
   onChangeStudent(event){
@@ -79,6 +83,7 @@ class FilesHome extends Component {
 
   updateFileList(email){
     this.fileList({user: email}).then((res) => {
+      console.log(res)
       this.setState({ files: res.data.files, loaded:true });
     });
   }
