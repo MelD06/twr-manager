@@ -18,7 +18,7 @@ class FilesHome extends Component {
   state = {
     files: [],
     students: [],
-    selectedStudent: Firebase.auth().currentUser.email,
+    selectedStudent: Firebase.auth().currentUser,
     userRole: '',
     loaded: false
   };
@@ -30,6 +30,7 @@ class FilesHome extends Component {
           id: "0",
           title: "Commentaire Global",
           comment: "",
+          type: 'technique',
           edit: false
         }
       ],
@@ -67,6 +68,7 @@ class FilesHome extends Component {
       if(curUserRole === 'admin' || curUserRole === 'instructor'){
         this.studentsF().then((students) => {
           this.setState({students: students.data, selectedStudent: students.data[0]});
+          console.log(students.data[0]);
           this.updateFileList(students.data[0].email)
         }).catch();
       } else {
@@ -79,7 +81,7 @@ class FilesHome extends Component {
   onChangeStudent(event){
     const newStudent = this.state.students.filter(st => st.email === event.target.value);
     this.setState({selectedStudent: newStudent[0], loaded:false});
-    this.updateFileList(newStudent[0]);
+    this.updateFileList(newStudent[0].email);
   }
 
   updateFileList(email){

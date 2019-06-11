@@ -15,115 +15,115 @@ const fileSections = [
     sectionId: "1",
     title: "Relèves - Prise de Service",
     subtitle: "Consignes, relève entrante & sortante",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "2",
     title: "Equipements, connaissance, utilisation matériel",
     subtitle: "Radio - VIGIE - Balisage - Platine RDO/TEL",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "3",
     title: "ATIS",
     subtitle: "Utilisation de l'outil & des informations",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "4",
     title: "Tenue de strips et Tableau",
     subtitle: "Exploitation - Gestion - Soin",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "5",
     title: "Phraséologie",
     subtitle: "Français - Anglais - Anti-Incursion - Info de trafic",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "6",
     title: "Boucle de collationnement",
     subtitle: "Ecoute, vérification & exigence",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "7",
     title: "Respect règlementaire et consignes",
     subtitle: "Nationale - Manex - LOAs",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "8",
     title: "Connaissance Plateforme",
     subtitle: "HS - Parking - Moyens - Inspection de Piste",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "9",
     title: "Gestion des Régulations",
     subtitle: "CTOT - Vols Suspendus - Dialogue Nice",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "10",
     title: "Gestion des départs",
     subtitle: "Stratégie & Suivi - Mise en route",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "11",
     title: "Gestion des arrivées",
     subtitle: "Suivi & anticipation - Relations APP - OPS",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "12",
     title: "Gestion du Circuit",
     subtitle: " ",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "13",
     title: "Changement de configuration",
     subtitle: "Anticipation - Actions",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "14",
     title: "Gestion des vols VFR",
     subtitle: "Plan de vol - Info de Trafic - VFR/S - VFR de nuit",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "15",
     title: "Surveillance aire de manoeuvre",
     subtitle: "Regarder Dehors",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "16",
     title: "Gestion des vols H",
     subtitle: "Plateforme - Quai du Large",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "17",
     title: "Situations Inhabituelles",
     subtitle: "Pannes - Vent Fort - FNE",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "18",
     title: "Détection des conflits",
     subtitle: " ",
-    type: 'technical'
+    type: 'technique'
   },
   {
     sectionId: "19",
     title: "Section Comportement",
     subtitle: "sub",
-    type: 'behavior'
+    type: 'comportement'
   }
 ];
 
@@ -135,6 +135,7 @@ class fileDetail extends Component {
     sections: [],
     currentType: 'technique',
     aboutToDelete: false,
+    studentName: '',
     fileData: {
       sections: [],
       info: {
@@ -155,16 +156,16 @@ class fileDetail extends Component {
         edit: false
       }
     },
-    isUserAdmin: false,
-    studentList: null
+    isUserAdmin: false
   };
 
   componentWillMount() {
       const getFile = Firebase.functions().httpsCallable('getFile');
       getFile({file: this.props.match.params.id}).then(res => {
+        console.log('getFile Called');
         this.emailToName({email: res.data.info.student}).then(name => {
-          res.data.info.student = name.data;
           this.setState({
+            studentName: name.data,
             fileData: res.data
           })
         }).catch();
@@ -177,15 +178,6 @@ class fileDetail extends Component {
         this.setState({
           isUserAdmin: tokenResult.claims.admin
         });
-        return tokenResult.claims;
-      })
-      .then(claims => {
-        if (claims.role === "admin") {
-          const studentsF = Firebase.functions().httpsCallable("getStudents");
-          studentsF().then(students => {
-            this.setState({ studentList: students.data });
-          });
-        }
       });
   }
 
@@ -272,6 +264,7 @@ class fileDetail extends Component {
         id: this.state.sectionToAdd,
         title: sectionData.title,
         subtitle: sectionData.subtitle,
+        type: sectionData.type,
         comment: "",
         target: "ok",
         edit: true
@@ -279,6 +272,7 @@ class fileDetail extends Component {
       newData.sections.push(newSection);
 
       this.setState({
+        currentType: sectionData.type,
         fileData: newData
       });
     }
@@ -407,24 +401,28 @@ class fileDetail extends Component {
     }
 
     const sections = this.state.fileData.sections.map(element => {
-      return (
-        <FileSectionComment
-          key={element.id}
-          id={element.id}
-          criterion={element.title}
-          subtitle={element.subtitle}
-          target={element.target}
-          comment={element.comment}
-          edit={element.edit}
-          hasPower={this.state.isUserAdmin}
-          sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
-          sectionDelete={() => this.onSectionDelete(element.id)}
-          sectionChange={event =>
-            this.onSectionChangeHandler(event, element.id)}
-          sectionChangeTarget={event =>
-            this.onSectionChangeTarget(element.id, event)}
-        />
-      );
+      if(this.state.currentType === element.type){
+        return (
+          <FileSectionComment
+            key={element.id}
+            id={element.id}
+            criterion={element.title}
+            subtitle={element.subtitle}
+            target={element.target}
+            comment={element.comment}
+            edit={element.edit}
+            hasPower={this.state.isUserAdmin}
+            sectionToggleEdit={() => this.onSectionEditHandler(element.id)}
+            sectionDelete={() => this.onSectionDelete(element.id)}
+            sectionChange={event =>
+              this.onSectionChangeHandler(event, element.id)}
+            sectionChangeTarget={event =>
+              this.onSectionChangeTarget(element.id, event)}
+          />
+        );
+      } else {
+        return null;
+      }
     });
 
     let deleteDialog = (
